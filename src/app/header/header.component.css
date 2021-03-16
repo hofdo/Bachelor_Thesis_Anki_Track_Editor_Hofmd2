@@ -1,0 +1,15 @@
+.fill-space {
+  flex: 1 1 auto;
+}
+
+.mat-flat-button-hover:hover {
+  opacity: 0.8;
+  display: inline;
+}
+
+footer{
+  position:fixed;
+  bottom:0px;
+  background-color:pink;
+  width:100%;
+}
