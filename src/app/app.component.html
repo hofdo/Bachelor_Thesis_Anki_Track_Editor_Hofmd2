@@ -1,9 +1,6 @@
 <app-header></app-header>
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav_left mode="side" opened="true" position="start" class="sidenav"> Sidenav 2	</mat-sidenav>
-  <mat-sidenav-content>
-    Main Content
-  </mat-sidenav-content>
-  <mat-sidenav #sidenav_right mode="side" opened="true" position="end" class="sidenav"> Sidenav 2	</mat-sidenav>
-</mat-sidenav-container>
+<div class="h-100">
+  <router-outlet></router-outlet>
+</div>
 <app-footer></app-footer>
+

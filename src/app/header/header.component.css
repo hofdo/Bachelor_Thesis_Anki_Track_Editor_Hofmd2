@@ -2,14 +2,14 @@
   flex: 1 1 auto;
 }
 
+.mat-nav-list {
+  display: flex;
+  flex-direction: row;
+}
+
 .mat-flat-button-hover:hover {
   opacity: 0.8;
   display: inline;
 }
 
-footer{
-  position:fixed;
-  bottom:0px;
-  background-color:pink;
-  width:100%;
-}
+
