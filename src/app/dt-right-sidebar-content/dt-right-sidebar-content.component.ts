@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DigitalTwinSettingsContentDialog} from '../digital-twin/digital-twin.component';
 import {MatDialog} from '@angular/material/dialog';
+import {TrackEditorRightSidebarDialog} from '../te-right-sidebar-content/te-right-sidebar-content.component';
 
 @Component({
   selector: 'app-dt-right-sidebar-content',
@@ -16,7 +17,10 @@ export class DtRightSidebarContentComponent{
   items = Array.from({length: 40}).map((_, i) => `Item #${i}`);
 
   openDialog() {
-    const dialogRef = this.dialog.open(DigitalTwinRightSidebarDialog);
+    const dialogRef = this.dialog.open(DigitalTwinRightSidebarDialog, {
+      //width: '20%',
+      panelClass: 'dt-right-sidebar-dialog-custom'
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);

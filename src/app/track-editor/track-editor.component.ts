@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
-import {SideNavRightService} from '../Services/side-nav-right.service';
-import {SideNavLeftService} from '../Services/side-nav-left.service';
+import {SideNavRightService} from '../services/side-nav-right.service';
+import {SideNavLeftService} from '../services/side-nav-left.service';
 import {MatDialog} from '@angular/material/dialog';
 
 @Component({

@@ -7,3 +7,13 @@
 .example-item {
   padding: 5px;
 }
+
+.dt-add-circle {
+  color: forestgreen;
+}
+
+.fill-space {
+  flex: 1 1 auto;
+}
+
+

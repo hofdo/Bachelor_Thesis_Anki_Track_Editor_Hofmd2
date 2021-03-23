@@ -1,6 +1,6 @@
 <div class="h-100">
   <mat-sidenav-container class="sidenav-container h-100">
-    <mat-sidenav #sidenav_left mode="push" opened="false" position="start" class="sidenav_left bg-light m-md-auto">
+    <mat-sidenav #sidenav_left mode="push" opened="false" position="start" class="sidenav_left m-md-auto">
       <mat-nav-list>
         <a mat-list-item (click)="openDialog()" > Settings </a>
         <a mat-list-item [matMenuTriggerFor]="import_menu">
@@ -22,7 +22,7 @@
     <mat-sidenav-content class="work_field">
       Main Content
     </mat-sidenav-content>
-    <mat-sidenav #sidenav_right mode="side" opened="true" position="end" class="sidenav_right bg-light">
+    <mat-sidenav #sidenav_right mode="side" opened="true" position="end" class="sidenav_right">
       <app-te-right-sidebar-content></app-te-right-sidebar-content>
     </mat-sidenav>
   </mat-sidenav-container>

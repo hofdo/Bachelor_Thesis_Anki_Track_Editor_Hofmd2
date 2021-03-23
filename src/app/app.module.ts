@@ -12,8 +12,8 @@ import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule} from '@angular/mater
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {FormsModule} from '@angular/forms';
 import {MatExpansionModule} from '@angular/material/expansion';
-import {SideNavLeftService} from './Services/side-nav-left.service';
-import {SideNavRightService} from './Services/side-nav-right.service';
+import {SideNavLeftService} from './services/side-nav-left.service';
+import {SideNavRightService} from './services/side-nav-right.service';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
@@ -29,6 +29,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { MaterialCardElevationDirective } from './material-card-elevation.directive';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 
 
@@ -72,6 +73,7 @@ import { MaterialCardElevationDirective } from './material-card-elevation.direct
     MatInputModule,
     MatCardModule,
     MatButtonToggleModule,
+    MatSlideToggleModule,
   ],
   providers: [SideNavLeftService, SideNavRightService],
   bootstrap: [AppComponent]

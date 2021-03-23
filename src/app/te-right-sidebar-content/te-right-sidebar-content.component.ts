@@ -15,7 +15,10 @@ export class TeRightSidebarContentComponent {
   items = Array.from({length: 40}).map((_, i) => `Item #${i}`);
 
   openDialog() {
-    const dialogRef = this.dialog.open(TrackEditorRightSidebarDialog);
+    const dialogRef = this.dialog.open(TrackEditorRightSidebarDialog, {
+      //width: '20%',
+      panelClass: 'te-right-sidebar-dialog-custom'
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);

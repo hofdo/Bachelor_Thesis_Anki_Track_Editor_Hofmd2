@@ -1,9 +1,48 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.css";
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+/* @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';*/
+ @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+/*@import '~@angular/material/prebuilt-themes/pink-bluegrey.css';*/
+/* @import '~@angular/material/prebuilt-themes/purple-green.css'; */
 
-body {font-family: Roboto, "Helvetica Neue", sans-serif; }
+.te-right-sidebar-dialog-custom mat-dialog-container {
+  min-width: 10%;
+  max-width: 600px;
+}
+
+.te-right-sidebar-dialog-custom .te-dialog-btn-add {
+  color: forestgreen;
+  background-color: lightgrey;
+}
+
+.te-right-sidebar-dialog-custom .te-dialog-btn-close {
+  background-color: lightgrey;
+}
+
+.te-right-sidebar-dialog-custom div {
+  padding: 10px;
+}
+
+.dt-right-sidebar-dialog-custom mat-dialog-container {
+  min-width: 10%;
+  max-width: 600px;
+}
+
+.dt-right-sidebar-dialog-custom .dt-dialog-btn-add {
+  color: forestgreen;
+  background-color: lightgrey;
+}
+
+.dt-right-sidebar-dialog-custom .dt-dialog-btn-close {
+  background-color: lightgrey;
+}
+
+.dt-right-sidebar-dialog-custom div {
+  padding: 10px;
+}
 
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
