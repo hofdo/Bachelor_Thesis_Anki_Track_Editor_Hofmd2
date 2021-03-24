@@ -2,14 +2,14 @@
   <div *cdkVirtualFor="let item of items" class="example-item">
     <mat-card  appMaterialElevation [defaultElevation]="defaultElevation" raisedElevation="8">
       <img mat-card-image src="https://i.ebayimg.com/images/g/NYEAAOSw061fm-A~/s-l640.jpg" class="card-image" alt="">
-      <mat-card-title>Track-Piece</mat-card-title>
+      <mat-card-title>Car Nr #</mat-card-title>
       <mat-card-content>
         Bla bla bla
       </mat-card-content>
       <mat-card-actions align="end">
         <button mat-icon-button (click)="openDialog()"><mat-icon>fullscreen</mat-icon></button>
         <span class="fill-space"></span>
-        <button mat-flat-button color="primary" >Console</button>
+        <button mat-flat-button color="primary" (click)="openBottomSheet()" >Console</button>
       </mat-card-actions>
     </mat-card>
   </div>

@@ -1,0 +1,50 @@
+.work_field mat-card {
+  margin: 10px;
+  padding: 10px;
+  min-height: 90%;
+
+  background-image: url("src/card-main-bg.png");
+}
+
+mat-grid-tile {
+  background: lightblue;
+}
+
+.transform90 {
+  transform: rotate(-90deg);
+  /* Legacy vendor prefixes that you probably don't need... */
+  /* Safari */
+  -webkit-transform: rotate(-90deg);
+  /* Firefox */
+  -moz-transform: rotate(-90deg);
+  /* IE */
+  -ms-transform: rotate(-90deg);
+  /* Opera */
+  -o-transform: rotate(-90deg);
+}
+
+.transform180 {
+  transform: rotate(-180deg);
+  /* Legacy vendor prefixes that you probably don't need... */
+  /* Safari */
+  -webkit-transform: rotate(-180deg);
+  /* Firefox */
+  -moz-transform: rotate(-180deg);
+  /* IE */
+  -ms-transform: rotate(-180deg);
+  /* Opera */
+  -o-transform: rotate(-180deg);
+}
+
+.transform270 {
+  transform: rotate(-270deg);
+  /* Legacy vendor prefixes that you probably don't need... */
+  /* Safari */
+  -webkit-transform: rotate(-270deg);
+  /* Firefox */
+  -moz-transform: rotate(-270deg);
+  /* IE */
+  -ms-transform: rotate(-270deg);
+  /* Opera */
+  -o-transform: rotate(-270deg);
+}

@@ -1,4 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -10,3 +11,4 @@ export class AppComponent {
   title = 'bachelortrackeditor';
 
 }
+

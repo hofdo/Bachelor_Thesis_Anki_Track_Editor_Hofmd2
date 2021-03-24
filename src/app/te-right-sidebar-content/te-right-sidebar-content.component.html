@@ -1,13 +1,12 @@
-<cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
+<cdk-virtual-scroll-viewport itemSize="3" class="example-viewport">
   <div *cdkVirtualFor="let item of items" class="example-item">
     <mat-card appMaterialElevation [defaultElevation]="defaultElevation" raisedElevation="8">
-      <img mat-card-image src="https://image.shutterstock.com/shutterstock/photos/1037719204/display_1500/stock-vector-ui-image-placeholder-for-wireframes-for-apps-and-websites-1037719204.jpg" alt="">
-      <mat-card-title>Track-Piece</mat-card-title>
+      <img mat-card-image src="{{item.url}}" class="rotate-90" width="60" alt="">
+      <mat-card-title>{{item.name}}</mat-card-title>
       <mat-card-content>
-        Bla bla bla
       </mat-card-content>
       <mat-card-actions>
-        <button mat-icon-button (click)="openDialog()"><mat-icon>fullscreen</mat-icon></button>
+        <button mat-icon-button (click)="openDialog(item)"><mat-icon>fullscreen</mat-icon></button>
         <button mat-icon-button ><mat-icon>add_circle_outline</mat-icon></button>
       </mat-card-actions>
     </mat-card>

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 import {RouterModule} from '@angular/router';
 import {HeaderComponent} from './header/header.component';
 import {FooterComponent} from './footer/footer.component';
@@ -21,15 +21,22 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatMenuModule} from '@angular/material/menu';
 import {TrackEditorComponent, TrackEditorSettingsContentDialog} from './track-editor/track-editor.component';
 import {DigitalTwinComponent, DigitalTwinSettingsContentDialog} from './digital-twin/digital-twin.component';
-import {DigitalTwinRightSidebarDialog, DtRightSidebarContentComponent} from './dt-right-sidebar-content/dt-right-sidebar-content.component';
+import {
+  DigitalTwinRightSidebarConsole,
+  DigitalTwinRightSidebarDialog,
+  DtRightSidebarContentComponent
+} from './dt-right-sidebar-content/dt-right-sidebar-content.component';
 import {TeRightSidebarContentComponent, TrackEditorRightSidebarDialog} from './te-right-sidebar-content/te-right-sidebar-content.component';
-import {MatDialogModule} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { MaterialCardElevationDirective } from './material-card-elevation.directive';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 
 
@@ -47,35 +54,42 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MaterialCardElevationDirective,
     MaterialCardElevationDirective,
     DigitalTwinRightSidebarDialog,
-    TrackEditorRightSidebarDialog
+    TrackEditorRightSidebarDialog,
+    DigitalTwinRightSidebarConsole
   ],
-  imports: [
-    BrowserModule,
-    RouterModule.forRoot([
-      {path: '', redirectTo: 'TrackEditor', pathMatch: 'full'},
-      {path: 'TrackEditor', component: TrackEditorComponent},
-      {path: 'DigitalTwin', component: DigitalTwinComponent},
-    ]),
-    BrowserAnimationsModule,
-    MatSidenavModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    FormsModule,
-    MatExpansionModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatListModule,
-    ScrollingModule,
-    MatMenuModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatCardModule,
-    MatButtonToggleModule,
-    MatSlideToggleModule,
+    imports: [
+        BrowserModule,
+        RouterModule.forRoot([
+            {path: '', redirectTo: 'TrackEditor', pathMatch: 'full'},
+            {path: 'TrackEditor', component: TrackEditorComponent},
+            {path: 'DigitalTwin', component: DigitalTwinComponent},
+        ]),
+        BrowserAnimationsModule,
+        MatSidenavModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        FormsModule,
+        MatExpansionModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatListModule,
+        ScrollingModule,
+        MatMenuModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatCardModule,
+        MatButtonToggleModule,
+        MatSlideToggleModule,
+        MatSnackBarModule,
+        MatBottomSheetModule,
+        MatGridListModule
+    ],
+  providers: [
+    SideNavLeftService,
+    SideNavRightService,
   ],
-  providers: [SideNavLeftService, SideNavRightService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
