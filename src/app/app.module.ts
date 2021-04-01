@@ -37,6 +37,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import {GridsterModule} from 'angular-gridster2';
 
 
 
@@ -57,35 +59,37 @@ import {MatGridListModule} from '@angular/material/grid-list';
     TrackEditorRightSidebarDialog,
     DigitalTwinRightSidebarConsole
   ],
-    imports: [
-        BrowserModule,
-        RouterModule.forRoot([
-            {path: '', redirectTo: 'TrackEditor', pathMatch: 'full'},
-            {path: 'TrackEditor', component: TrackEditorComponent},
-            {path: 'DigitalTwin', component: DigitalTwinComponent},
-        ]),
-        BrowserAnimationsModule,
-        MatSidenavModule,
-        MatButtonModule,
-        MatCheckboxModule,
-        FormsModule,
-        MatExpansionModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatListModule,
-        ScrollingModule,
-        MatMenuModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatInputModule,
-        MatCardModule,
-        MatButtonToggleModule,
-        MatSlideToggleModule,
-        MatSnackBarModule,
-        MatBottomSheetModule,
-        MatGridListModule
-    ],
+  imports: [
+    BrowserModule,
+    RouterModule.forRoot([
+      {path: '', redirectTo: 'TrackEditor', pathMatch: 'full'},
+      {path: 'TrackEditor', component: TrackEditorComponent},
+      {path: 'DigitalTwin', component: DigitalTwinComponent},
+    ]),
+    BrowserAnimationsModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    FormsModule,
+    MatExpansionModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatListModule,
+    ScrollingModule,
+    MatMenuModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatCardModule,
+    MatButtonToggleModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatBottomSheetModule,
+    MatGridListModule,
+    DragDropModule,
+    GridsterModule
+  ],
   providers: [
     SideNavLeftService,
     SideNavRightService,

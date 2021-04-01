@@ -6,9 +6,41 @@
   background-image: url("src/card-main-bg.png");
 }
 
-mat-grid-tile {
-  background: lightblue;
+gridster-item .gridster-item-img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  z-index: 0;
 }
+
+gridster-item .gridster-item-img-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
+  color: #FFF;
+  z-index: 1;
+}
+
+gridster-item:hover .gridster-item-img-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, .6);
+}
+
+gridster-item:hover .gridster-item-img-overlay mat-card{
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, .0);
+}
+
+gridster-item:hover .gridster-item-img-overlay mat-card .gridster-item-img-overlay-button{
+  z-index: 999;
+}
+
+
 
 .transform90 {
   transform: rotate(-90deg);
@@ -48,5 +80,3 @@ mat-grid-tile {
   /* Opera */
   -o-transform: rotate(-270deg);
 }
-
-

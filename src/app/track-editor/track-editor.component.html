@@ -20,56 +20,24 @@
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content class="work_field">
-      <mat-card class="w-auto mat-elevation-z10">
-        <mat-grid-list cols="5" rowHeight="1:1">
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform180 " src="assets/directory/Curve_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform90" src="assets/directory/Straight_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform90" src="assets/directory/Straight_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform90" src="assets/directory/Straight_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform90" src="assets/directory/Curve_Template.png" alt="">
-          </mat-grid-tile>
-
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform270" src="assets/directory/Curve_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform90" src="assets/directory/Straight_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform90" src="assets/directory/Straight_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform90" src="assets/directory/Straight_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto" src="assets/directory/Curve_Template.png" alt="">
-          </mat-grid-tile>
-
-          <mat-grid-tile>11</mat-grid-tile>
-          <mat-grid-tile>12</mat-grid-tile>
-          <mat-grid-tile>13</mat-grid-tile>
-          <mat-grid-tile>14</mat-grid-tile>
-          <mat-grid-tile>15</mat-grid-tile>
-
-          <mat-grid-tile>16</mat-grid-tile>
-          <mat-grid-tile>17</mat-grid-tile>
-          <mat-grid-tile>18</mat-grid-tile>
-          <mat-grid-tile>19</mat-grid-tile>
-          <mat-grid-tile>20</mat-grid-tile>
-        </mat-grid-list>
-      </mat-card>
+        <gridster [options]="options">
+          <gridster-item class="" [item]="grid_item.item" *ngFor="let grid_item of grid_items">
+            <div class="gridster-item-img-overlay">
+              <mat-card class="mat-elevation-z0">
+                <mat-card-actions>
+                  <button mat-icon-button class="gridster-item-img-overlay-button" (click)="rotateItem(grid_item.id)"><mat-icon color="accent">rotate_right</mat-icon></button>
+                </mat-card-actions>
+              </mat-card>
+            </div>
+            <img src="{{grid_item.url}}" id="{{'gridster-item-image' + grid_item.id}}" class="gridster-item-img" alt="">
+          </gridster-item>
+        </gridster>
+      <div>
+        <button mat-button>rotate</button>
+      </div>
     </mat-sidenav-content>
     <mat-sidenav #sidenav_right mode="side" opened="true" position="end" class="sidenav_right">
-      <app-te-right-sidebar-content></app-te-right-sidebar-content>
+      <app-te-right-sidebar-content (button_clicked)="addItem($event)"></app-te-right-sidebar-content>
     </mat-sidenav>
   </mat-sidenav-container>
 </div>
