@@ -13,8 +13,8 @@
         <a mat-list-item [matMenuTriggerFor]="export_menu">
           Export
           <mat-menu  #export_menu="matMenu">
-            <button mat-menu-item>Item 1</button>
-            <button mat-menu-item>Item 2</button>
+            <button mat-menu-item (click)="exportAsSingle()">As one image</button>
+            <button mat-menu-item>As separate images</button>
           </mat-menu>
         </a>
       </mat-nav-list>
@@ -25,16 +25,22 @@
             <div class="gridster-item-img-overlay">
               <mat-card class="mat-elevation-z0">
                 <mat-card-actions>
-                  <button mat-icon-button class="gridster-item-img-overlay-button" (click)="rotateItem(grid_item.id)"><mat-icon color="accent">rotate_right</mat-icon></button>
+                  <button mat-icon-button class="gridster-item-img-overlay-button" (click)="rotateItem(grid_item.id)">
+                    {{grid_item.id}}
+                    <mat-icon color="accent">
+                      rotate_right
+                    </mat-icon>
+                  </button>
+                  <button mat-icon-button color="accent" (mousedown)="removeItem($event, grid_item)"
+                          (touchstart)="removeItem($event, grid_item)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
                 </mat-card-actions>
               </mat-card>
             </div>
             <img src="{{grid_item.url}}" id="{{'gridster-item-image' + grid_item.id}}" class="gridster-item-img" alt="">
           </gridster-item>
         </gridster>
-      <div>
-        <button mat-button>rotate</button>
-      </div>
     </mat-sidenav-content>
     <mat-sidenav #sidenav_right mode="side" opened="true" position="end" class="sidenav_right">
       <app-te-right-sidebar-content (button_clicked)="addItem($event)"></app-te-right-sidebar-content>

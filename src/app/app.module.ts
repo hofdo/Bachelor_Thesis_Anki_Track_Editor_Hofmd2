@@ -39,6 +39,7 @@ import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {GridsterModule} from 'angular-gridster2';
+import {HttpClientModule} from '@angular/common/http';
 
 
 
@@ -88,7 +89,8 @@ import {GridsterModule} from 'angular-gridster2';
     MatBottomSheetModule,
     MatGridListModule,
     DragDropModule,
-    GridsterModule
+    GridsterModule,
+    HttpClientModule
   ],
   providers: [
     SideNavLeftService,

@@ -1,25 +1,21 @@
 <h2 mat-dialog-title>Settings</h2>
 <mat-dialog-content class="mat-typography">
-  <p>
-    <mat-form-field appearance="legacy">
-      <mat-label>Legacy form field</mat-label>
-      <input matInput placeholder="Placeholder">
-      <mat-hint>Hint</mat-hint>
+  <mat-form-field>
+    <mat-form-field>
+      <mat-label>Amount of Columns</mat-label>
+      <input matInput [(ngModel)]="data.maxCols">
     </mat-form-field>
-  </p>
-  <p>
-    <mat-form-field appearance="legacy">
-      <mat-label>Select</mat-label>
-      <mat-select>
-        <mat-option value="one">First option</mat-option>
-        <mat-option value="two">Second option</mat-option>
-      </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-form-field>
+      <mat-label>Amount of Rows</mat-label>
+      <input matInput [(ngModel)]="data.maxRows">
     </mat-form-field>
-  </p>
+  </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Save</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Save</button>
 </mat-dialog-actions>
 
 

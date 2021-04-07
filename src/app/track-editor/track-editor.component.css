@@ -1,9 +1,5 @@
-.work_field mat-card {
-  margin: 10px;
-  padding: 10px;
-  min-height: 90%;
-
-  background-image: url("src/card-main-bg.png");
+:host gridster {
+  background: lightgrey;
 }
 
 gridster-item .gridster-item-img {
@@ -37,10 +33,8 @@ gridster-item:hover .gridster-item-img-overlay mat-card{
 }
 
 gridster-item:hover .gridster-item-img-overlay mat-card .gridster-item-img-overlay-button{
-  z-index: 999;
+  z-index: 100;
 }
-
-
 
 .transform90 {
   transform: rotate(-90deg);
