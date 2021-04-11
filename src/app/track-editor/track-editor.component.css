@@ -36,6 +36,10 @@ gridster-item:hover .gridster-item-img-overlay mat-card .gridster-item-img-overl
   z-index: 100;
 }
 
+.file-input {
+  display: none;
+}
+
 .transform90 {
   transform: rotate(-90deg);
   /* Legacy vendor prefixes that you probably don't need... */

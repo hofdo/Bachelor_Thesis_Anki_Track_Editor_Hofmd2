@@ -37,13 +37,13 @@ export class TeRightSidebarContentComponent {
   addTrackPiece(type){
    switch (type) {
      case "straight_piece":
-       this.button_clicked.emit('add_straight')
+       this.button_clicked.emit('straight')
        break;
      case "curve_piece":
-       this.button_clicked.emit('add_curve')
+       this.button_clicked.emit('curve')
        break;
      case "intersection_piece":
-       this.button_clicked.emit('add_intersection')
+       this.button_clicked.emit('intersection')
        break;
    }
   }

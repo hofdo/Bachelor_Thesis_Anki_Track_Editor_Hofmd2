@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Settings</h2>
+<mat-dialog-content [formGroup]="form" class="mat-typography">
+  <mat-form-field appearance="standard">
+    <mat-label>Choose what to export</mat-label>
+    <mat-select formControlName="format" >
+      <mat-option value="single">Track</mat-option>
+      <mat-option value="multi">Track pieces</mat-option>
+      <mat-option value="conf">Conf-file</mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('format').invalid">You must make a selection</mat-error>
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="standard">
+    <mat-label>Choose File Format</mat-label>
+    <mat-select formControlName="fileFormat" [disabled]="form.get('format').value === 'conf'">
+      <mat-option value="jpg">JPEG</mat-option>
+      <mat-option value="png">PNG</mat-option>
+      <mat-option *ngIf="form.get('format').value !== 'single'" value="pdf">PDF</mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('fileFormat').invalid && form.get('format').value !== 'conf'">You must make a selection</mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button  [mat-dialog-close]="form" [disabled]="(!form.valid && form.get('format').value !== 'conf') || (form.get('format').value === 'conf' && !form.get('format').valid)" >Export</button>
+</mat-dialog-actions>
+
+<!-- Copyright 2020 Google LLC. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at http://angular.io/license -->

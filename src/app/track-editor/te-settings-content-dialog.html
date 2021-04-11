@@ -1,21 +1,18 @@
 <h2 mat-dialog-title>Settings</h2>
 <mat-dialog-content class="mat-typography">
   <mat-form-field>
-    <mat-form-field>
-      <mat-label>Amount of Columns</mat-label>
-      <input matInput [(ngModel)]="data.maxCols">
-    </mat-form-field>
+    <mat-label>Amount of Columns</mat-label>
+    <input matInput [(ngModel)]="data.maxCols">
   </mat-form-field>
+  <p></p>
   <mat-form-field>
-    <mat-form-field>
-      <mat-label>Amount of Rows</mat-label>
-      <input matInput [(ngModel)]="data.maxRows">
-    </mat-form-field>
+    <mat-label>Amount of Rows</mat-label>
+    <input matInput [(ngModel)]="data.maxRows">
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Save</button>
+  <button mat-button [mat-dialog-close]="data" >Save</button>
 </mat-dialog-actions>
 
 

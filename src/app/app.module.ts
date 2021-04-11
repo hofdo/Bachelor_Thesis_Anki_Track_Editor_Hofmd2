@@ -10,7 +10,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatButtonModule} from '@angular/material/button';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule} from '@angular/material/form-field';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {SideNavLeftService} from './services/side-nav-left.service';
 import {SideNavRightService} from './services/side-nav-right.service';
@@ -19,7 +19,11 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatMenuModule} from '@angular/material/menu';
-import {TrackEditorComponent, TrackEditorSettingsContentDialog} from './track-editor/track-editor.component';
+import {
+  TrackEditorComponent,
+  TrackEditorExportContentDialog, TrackEditorImportContentDialog,
+  TrackEditorSettingsContentDialog
+} from './track-editor/track-editor.component';
 import {DigitalTwinComponent, DigitalTwinSettingsContentDialog} from './digital-twin/digital-twin.component';
 import {
   DigitalTwinRightSidebarConsole,
@@ -40,6 +44,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {GridsterModule} from 'angular-gridster2';
 import {HttpClientModule} from '@angular/common/http';
+import {FileSaverModule} from 'ngx-filesaver';
 
 
 
@@ -58,7 +63,9 @@ import {HttpClientModule} from '@angular/common/http';
     MaterialCardElevationDirective,
     DigitalTwinRightSidebarDialog,
     TrackEditorRightSidebarDialog,
-    DigitalTwinRightSidebarConsole
+    DigitalTwinRightSidebarConsole,
+    TrackEditorExportContentDialog,
+    TrackEditorImportContentDialog,
   ],
   imports: [
     BrowserModule,
@@ -90,7 +97,9 @@ import {HttpClientModule} from '@angular/common/http';
     MatGridListModule,
     DragDropModule,
     GridsterModule,
-    HttpClientModule
+    HttpClientModule,
+    FileSaverModule,
+    ReactiveFormsModule
   ],
   providers: [
     SideNavLeftService,
