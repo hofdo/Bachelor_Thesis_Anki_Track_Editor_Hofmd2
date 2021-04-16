@@ -24,6 +24,7 @@
     "angular-gridster2": "^11.1.5",
     "bootstrap": "^4.6.0",
     "file-saver": "^2.0.5",
+    "ngx-cookie-service": "^11.0.2",
     "ngx-filesaver": "^11.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

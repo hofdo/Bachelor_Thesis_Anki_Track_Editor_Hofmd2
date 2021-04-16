@@ -1,0 +1,20 @@
+<div>
+<div class="gridster-item-img-overlay">
+  <mat-card class="mat-elevation-z0">
+    <mat-card-actions align="end">
+      <button mat-icon-button class="gridster-item-img-overlay-button" (click)="rotate()">
+        <mat-icon color="accent">
+          rotate_right
+        </mat-icon>
+      </button>
+      <span class="fill-space"></span>
+      {{grid_item.item.id}}
+      <button mat-icon-button color="accent" (mousedown)="removeItem($event, grid_item)"
+              (touchstart)="removeItem($event, grid_item)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+<img src="{{grid_item.url}}" [@rotatedState]='state' class="gridster-item-img" alt="">
+</div>

@@ -1,22 +1,23 @@
-import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Inject, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {SideNavRightService} from '../services/side-nav-right.service';
 import {SideNavLeftService} from '../services/side-nav-left.service';
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
-import {DisplayGrid, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType} from 'angular-gridster2';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType} from 'angular-gridster2';
 import {GridItem} from '../model/grid-item';
 import {FileSaverService} from 'ngx-filesaver';
 import {ExportService} from '../services/export.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Subject} from 'rxjs';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-track-editor',
   templateUrl: './track-editor.component.html',
   styleUrls: ['./track-editor.component.css']
 })
-export class TrackEditorComponent implements AfterViewInit, OnInit {
+export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('sidenav_right') public sidenav_right: MatSidenav;
   @ViewChild('sidenav_left') public sidenav_left: MatSidenav;
 
@@ -26,15 +27,22 @@ export class TrackEditorComponent implements AfterViewInit, OnInit {
   exportImage;
   exportImageFormat;
   public grid_items: { item: GridsterItem, type: string, url: string, id: number }[] = [];
-  grid_item_export: Array<GridItem> = [];
   id_counter: number = 1;
+
 
   constructor(public sidenavServiceRight: SideNavRightService,
               public sideNavServiceLeft: SideNavLeftService,
               public dialog: MatDialog,
               public exportService: ExportService,
               public fileSaverService: FileSaverService,
-              public snackBar: MatSnackBar) {
+              public snackBar: MatSnackBar,
+              public cookieService: CookieService) {
+    if (cookieService.check('grid_list')) {
+      this.grid_items = JSON.parse(cookieService.get('grid_list'));
+      this.id_counter = Math.max.apply(Math, this.grid_items.map(v => {
+        return v.item.id;
+      })) + 1;
+    }
   }
 
   ngAfterViewInit() {
@@ -66,12 +74,16 @@ export class TrackEditorComponent implements AfterViewInit, OnInit {
     };
   }
 
+  ngOnDestroy() {
+    this.cookieService.set('grid_list', JSON.stringify(this.grid_items));
+    this.cookieService.set('grid_options', JSON.stringify({
+      rows: this.maxRows,
+      cols: this.maxCols
+    }));
+  }
+
   itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
     // tslint:disable-next-line:no-console
-    console.info('itemInitialized', item.id);
-    console.info('itemInitialized', item.degree);
-    //Todo Workaround
-    document.getElementById('gridster-item-image' + item.id).style.transform = `rotate(${item.degree}deg)`;
   }
 
   addItem(event): void {
@@ -85,22 +97,25 @@ export class TrackEditorComponent implements AfterViewInit, OnInit {
     this.id_counter++;
   }
 
-  rotateItem(id, degree) {
-    let item;
-    console.log(id);
-    item = this.grid_items.find(i => i.id === id);
-    item.item.degree += degree;
-    if (item.item.degree >= 360) {
-      item.item.degree = 0;
-    }
-    //ToDo Workaround --> sth ngClass*
-    document.getElementById('gridster-item-image' + id).style.transform = `rotate(${item.item.degree}deg)`;
+  rotateItem(event) {
+    let id = event.id;
+    let state = event.degree;
+    this.grid_items.map(value => {
+      if (value.id === id) {
+        value.item.degree = state;
+      }
+    });
+
   }
 
-  removeItem($event: MouseEvent | TouchEvent, item) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    this.grid_items.splice(this.grid_items.indexOf(item), 1);
+  removeItem(event) {
+    event.event.preventDefault();
+    event.event.stopPropagation();
+    this.grid_items.splice(this.grid_items.indexOf(event.item), 1);
+  }
+
+  removeEmptyGrids(grid_list, cols, rows){
+
   }
 
   openDialogSettings() {
@@ -123,7 +138,6 @@ export class TrackEditorComponent implements AfterViewInit, OnInit {
     );
 
     dialogRef.afterClosed().subscribe(form => {
-      console.log(form.get('format').value);
       let format = form.get('format').value;
       let fileFormat = form.get('fileFormat').value;
       switch (format) {
@@ -142,15 +156,44 @@ export class TrackEditorComponent implements AfterViewInit, OnInit {
           }
           break;
         case 'single':
+          let grid_item_export: Array<GridItem> = [];
+          let rows = this.maxRows;
+          let cols = this.maxCols;
+          //TODO Remove the second array
           //Export the whole track as one image
           if (this.grid_items.length !== 0) {
             this.grid_items.forEach((value, index) => {
-              let grid_item: GridItem = new GridItem(value.type, value.url, value.id, value.item.degree, value.item.x, value.item.y, value.item.cols, value.item.rows);
-              this.grid_item_export.push(grid_item);
+              let grid_item: GridItem = new GridItem(value.type, value.url, value.id, parseInt(value.item.degree), value.item.x, value.item.y, value.item.cols, value.item.rows);
+              grid_item_export.push(grid_item);
             });
-            this.exportService.exportSingle(this.grid_item_export, this.options, fileFormat).subscribe(data => {
+
+            //Todo Put in separate function
+            //Remove Empty Cells
+            for (let x = 0; x < rows; x++) {
+              if (grid_item_export.some(value => {
+                return value.x_cord === x;
+              })) {
+                grid_item_export.map(value => {
+                  value.x_cord -= x;
+                })
+                rows = Math.max.apply(Math, grid_item_export.map(value => {return value.x_cord}))+1
+                break
+              }
+            }
+            for (let y = 0; y < cols; y++) {
+              if (grid_item_export.some(value => {
+                return value.y_cord === y;
+              })) {
+                grid_item_export.map(value => {
+                  value.y_cord -= y;
+                })
+                cols = Math.max.apply(Math, grid_item_export.map(value => {return value.y_cord}))+1
+                break
+              }
+            }
+            this.cookieService.set("dt_grid_list", JSON.stringify(grid_item_export))
+            this.exportService.exportSingle(grid_item_export, rows, cols, fileFormat).subscribe(data => {
               this.fileSaverService.save(data, 'test.' + fileFormat);
-              this.grid_item_export.splice(0, this.grid_item_export.length);
             });
           } else {
             this.snackBar.open('Export failed! No track pieces detected.', null, {
@@ -177,7 +220,6 @@ export class TrackEditorComponent implements AfterViewInit, OnInit {
       this.id_counter = Math.max.apply(Math, imported_grid_items.map(v => {
         return v.item.id;
       })) + 1;
-      console.log(this.id_counter);
       imported_grid_items.forEach(v => {
         this.grid_items.push(v);
       });

@@ -45,7 +45,10 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {GridsterModule} from 'angular-gridster2';
 import {HttpClientModule} from '@angular/common/http';
 import {FileSaverModule} from 'ngx-filesaver';
+import { TrackEditorGridsterItemContentComponent } from './track-editor/track-editor-gridster-item-content/track-editor-gridster-item-content.component';
+import { DigitalTwinGridsterItemContentComponent } from './digital-twin/digital-twin-gridster-item-content/digital-twin-gridster-item-content.component';
 
+import { environment as env} from '../environments/environment.prod';
 
 
 @NgModule({
@@ -66,6 +69,8 @@ import {FileSaverModule} from 'ngx-filesaver';
     DigitalTwinRightSidebarConsole,
     TrackEditorExportContentDialog,
     TrackEditorImportContentDialog,
+    TrackEditorGridsterItemContentComponent,
+    DigitalTwinGridsterItemContentComponent,
   ],
   imports: [
     BrowserModule,

@@ -20,53 +20,7 @@
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content class="work_field">
-      <mat-card class="w-auto mat-elevation-z10">
-        <mat-grid-list cols="5" rowHeight="1:1">
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform180 " src="assets/directory/Curve_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform90" src="assets/directory/Straight_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform90" src="assets/directory/Straight_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform90" src="assets/directory/Straight_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform90" src="assets/directory/Curve_Template.png" alt="">
-          </mat-grid-tile>
-
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform270" src="assets/directory/Curve_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform90" src="assets/directory/Straight_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform90" src="assets/directory/Straight_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto transform90" src="assets/directory/Straight_Template.png" alt="">
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <img class="w-100 h-auto" src="assets/directory/Curve_Template.png" alt="">
-          </mat-grid-tile>
-
-          <mat-grid-tile>11</mat-grid-tile>
-          <mat-grid-tile>12</mat-grid-tile>
-          <mat-grid-tile>13</mat-grid-tile>
-          <mat-grid-tile>14</mat-grid-tile>
-          <mat-grid-tile>15</mat-grid-tile>
-
-          <mat-grid-tile>16</mat-grid-tile>
-          <mat-grid-tile>17</mat-grid-tile>
-          <mat-grid-tile>18</mat-grid-tile>
-          <mat-grid-tile>19</mat-grid-tile>
-          <mat-grid-tile>20</mat-grid-tile>
-        </mat-grid-list>
-      </mat-card>
+      <canvas #canvas class="dt-canvas"></canvas>
     </mat-sidenav-content>
     <mat-sidenav #sidenav_right mode="side" opened="true" position="end" class="sidenav_right bg-light">
       <app-dt-right-sidebar-content></app-dt-right-sidebar-content>

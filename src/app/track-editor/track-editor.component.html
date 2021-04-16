@@ -10,23 +10,7 @@
     <mat-sidenav-content class="work_field">
         <gridster [options]="options">
           <gridster-item class="" [item]="grid_item.item" *ngFor="let grid_item of grid_items">
-            <div class="gridster-item-img-overlay">
-              <mat-card class="mat-elevation-z0">
-                <mat-card-actions>
-                  <button mat-icon-button class="gridster-item-img-overlay-button" (click)="rotateItem(grid_item.id, 90)">
-                    {{grid_item.id}}
-                    <mat-icon color="accent">
-                      rotate_right
-                    </mat-icon>
-                  </button>
-                  <button mat-icon-button color="accent" (mousedown)="removeItem($event, grid_item)"
-                          (touchstart)="removeItem($event, grid_item)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </mat-card-actions>
-              </mat-card>
-            </div>
-            <img src="{{grid_item.url}}" id="{{'gridster-item-image' + grid_item.id}}" class="gridster-item-img" alt="">
+            <app-gridster-item-content [grid_item]="grid_item" [degree]="grid_item.item.degree" (remove_grid_item)="removeItem($event)" (rotate_grid_item)="rotateItem($event)"></app-gridster-item-content>
           </gridster-item>
         </gridster>
     </mat-sidenav-content>
