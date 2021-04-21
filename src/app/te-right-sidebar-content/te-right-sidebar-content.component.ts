@@ -16,10 +16,11 @@ export class TeRightSidebarContentComponent {
   }
 
   defaultElevation = 2;
+  //TODO Workaround List
   items: {id: number, name: string, url: string, type: string}[] = [
-    {"id": 0, "name": "Straight Track Piece", "url": "assets/directory/Straight_Template.png", "type": "straight_piece"},
-    {"id": 1, "name": "Curve Track Piece", "url": "assets/directory/Curve_Template.png", "type": "curve_piece"},
-    {"id": 1, "name": "Intersection Track Piece", "url": "assets/directory/Intersection_2.png", "type": "intersection_piece"}
+    {"id": 0, "name": "Straight Track Piece", "url": "http://localhost:8081/image?type=straight", "type": "straight"},
+    {"id": 1, "name": "Curve Track Piece", "url": "http://localhost:8081/image?type=curve", "type": "curve"},
+    {"id": 2, "name": "Intersection Track Piece", "url": "http://localhost:8081/image?type=intersection", "type": "intersection"}
     ];
 
   openDialog(data) {
@@ -35,17 +36,7 @@ export class TeRightSidebarContentComponent {
   }
 
   addTrackPiece(type){
-   switch (type) {
-     case "straight_piece":
-       this.button_clicked.emit('straight')
-       break;
-     case "curve_piece":
-       this.button_clicked.emit('curve')
-       break;
-     case "intersection_piece":
-       this.button_clicked.emit('intersection')
-       break;
-   }
+   this.button_clicked.emit(type)
   }
 
 }

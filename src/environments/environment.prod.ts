@@ -1,8 +1,13 @@
 export const environment = {
   production: true,
-  mqtt: {
-    server: "192.168.1.121",
+  websocket: {
+    url: "localhost",
     protocol: "ws",
-    port: 9001
+    port: 8082
+  },
+  Rest: {
+    server: "localhost",
+    protocol: "http",
+    port: 8081,
   }
 };

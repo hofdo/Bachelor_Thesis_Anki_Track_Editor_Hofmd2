@@ -9,7 +9,7 @@ import {FileSaverService} from 'ngx-filesaver';
 import {ExportService} from '../services/export.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Subject} from 'rxjs';
+import {interval, Subject} from 'rxjs';
 import {CookieService} from 'ngx-cookie-service';
 
 @Component({
@@ -26,8 +26,9 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
   maxRows: number = 5; //default
   exportImage;
   exportImageFormat;
+  interval;
   public grid_items: { item: GridsterItem, type: string, url: string, id: number }[] = [];
-  id_counter: number = 1;
+  id_counter: number;
 
 
   constructor(public sidenavServiceRight: SideNavRightService,
@@ -37,11 +38,17 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
               public fileSaverService: FileSaverService,
               public snackBar: MatSnackBar,
               public cookieService: CookieService) {
+
+    //ToDo Replace Cookies with LocalStorage
     if (cookieService.check('grid_list')) {
+      console.log(JSON.parse(cookieService.get('grid_list')));
       this.grid_items = JSON.parse(cookieService.get('grid_list'));
       this.id_counter = Math.max.apply(Math, this.grid_items.map(v => {
         return v.item.id;
       })) + 1;
+      if (!isFinite(this.id_counter)) {
+        this.id_counter = 1;
+      }
     }
   }
 
@@ -72,14 +79,12 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
         enabled: false
       }
     };
+    this.interval = setInterval(() => this.getActualGridImg(), 10000);
   }
 
   ngOnDestroy() {
     this.cookieService.set('grid_list', JSON.stringify(this.grid_items));
-    this.cookieService.set('grid_options', JSON.stringify({
-      rows: this.maxRows,
-      cols: this.maxCols
-    }));
+    clearInterval(this.interval);
   }
 
   itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
@@ -87,7 +92,7 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   addItem(event): void {
-    let url = 'http://localhost:8080/image?type=' + event;
+    let url = 'http://localhost:8081/image?type=' + event;
     this.grid_items.push({
       'item': {x: 0, y: 0, cols: 1, rows: 1, id: this.id_counter, degree: 0},
       'type': event,
@@ -102,6 +107,7 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
     let state = event.degree;
     this.grid_items.map(value => {
       if (value.id === id) {
+        console.log(state);
         value.item.degree = state;
       }
     });
@@ -114,8 +120,59 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
     this.grid_items.splice(this.grid_items.indexOf(event.item), 1);
   }
 
-  removeEmptyGrids(grid_list, cols, rows){
 
+  removeEmptyGrids(rows, cols, grid_list) {
+    let removeCounter_x = 0;
+    let removeCounter_y = 0;
+    //Todo Put in separate function
+    //Remove Empty Cells
+    for (let x = 0; x < rows; x++) {
+      if (grid_list.some(value => {
+        return value.item.x === x;
+      })) {
+        break;
+      } else {
+        removeCounter_x++;
+      }
+    }
+    for (let y = 0; y < cols; y++) {
+      if (grid_list.some(value => {
+        return value.item.y === y;
+      })) {
+        break;
+      } else {
+        removeCounter_y++;
+      }
+    }
+    grid_list.map(value => {
+      value.item.x -= removeCounter_x;
+      value.item.y -= removeCounter_y;
+    });
+    rows = Math.max.apply(Math, grid_list.map(value => {
+      return value.item.x;
+    })) + 1;
+    cols = Math.max.apply(Math, grid_list.map(value => {
+      return value.item.y;
+    })) + 1;
+
+    return {
+      rows: rows,
+      cols: cols,
+      list: grid_list
+    };
+  }
+
+  getActualGridImg() {
+    let res = this.removeEmptyGrids(this.maxRows, this.maxCols, this.grid_items);
+    this.cookieService.set('grid_options', JSON.stringify({
+      rows: res.rows,
+      cols: res.cols
+    }));
+    this.grid_items = res.list
+    this.exportService.exportSingle(this.grid_items, res.rows, res.cols, 'png').subscribe(data => {
+      let url = URL.createObjectURL(data);
+      this.cookieService.set('current_grid_img_url', url);
+    });
   }
 
   openDialogSettings() {
@@ -156,43 +213,21 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
           }
           break;
         case 'single':
-          let grid_item_export: Array<GridItem> = [];
           let rows = this.maxRows;
           let cols = this.maxCols;
-          //TODO Remove the second array
+
           //Export the whole track as one image
           if (this.grid_items.length !== 0) {
-            this.grid_items.forEach((value, index) => {
-              let grid_item: GridItem = new GridItem(value.type, value.url, value.id, parseInt(value.item.degree), value.item.x, value.item.y, value.item.cols, value.item.rows);
-              grid_item_export.push(grid_item);
-            });
-
-            //Todo Put in separate function
-            //Remove Empty Cells
-            for (let x = 0; x < rows; x++) {
-              if (grid_item_export.some(value => {
-                return value.x_cord === x;
-              })) {
-                grid_item_export.map(value => {
-                  value.x_cord -= x;
-                })
-                rows = Math.max.apply(Math, grid_item_export.map(value => {return value.x_cord}))+1
-                break
-              }
-            }
-            for (let y = 0; y < cols; y++) {
-              if (grid_item_export.some(value => {
-                return value.y_cord === y;
-              })) {
-                grid_item_export.map(value => {
-                  value.y_cord -= y;
-                })
-                cols = Math.max.apply(Math, grid_item_export.map(value => {return value.y_cord}))+1
-                break
-              }
-            }
-            this.cookieService.set("dt_grid_list", JSON.stringify(grid_item_export))
-            this.exportService.exportSingle(grid_item_export, rows, cols, fileFormat).subscribe(data => {
+            let res = this.removeEmptyGrids(rows, cols, this.grid_items);
+            rows = res.rows;
+            cols = res.cols;
+            this.grid_items = res.list;
+            this.cookieService.set('grid_options', JSON.stringify({
+              rows: rows,
+              cols: cols
+            }));
+            this.cookieService.set('dt_grid_list', JSON.stringify(this.grid_items));
+            this.exportService.exportSingle(this.grid_items, rows, cols, fileFormat).subscribe(data => {
               this.fileSaverService.save(data, 'test.' + fileFormat);
             });
           } else {
@@ -207,6 +242,7 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
       }
     });
   }
+
 
   openDialogImport() {
     const dialogRef = this.dialog.open(TrackEditorImportContentDialog, {
@@ -225,6 +261,17 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
       });
     });
   }
+
+  async canDeactivate(){
+    if (this.grid_items.length > 0){
+
+    }
+    else {
+      return true
+    }
+
+  }
+
 }
 
 @Component({
@@ -259,7 +306,6 @@ export class TrackEditorImportContentDialog {
     if (file) {
       fileReader.onload = ev => {
         this.fileContent = ev.target.result.toString();
-        console.log(this.fileContent);
       };
       fileReader.readAsText(file);
     }
@@ -272,6 +318,25 @@ export class TrackEditorImportContentDialog {
   templateUrl: 'te-export-content-dialog.html',
 })
 export class TrackEditorExportContentDialog implements OnInit {
+  form: FormGroup;
+  form_2: FormGroup;
+
+  constructor(public fb: FormBuilder) {
+  }
+
+  ngOnInit(): void {
+    this.form = this.fb.group({
+      'format': ['', Validators.required],
+      'fileFormat': ['', Validators.required],
+    });
+  }
+}
+
+@Component({
+  selector: 'export-content-dialog',
+  templateUrl: 'te-export-content-dialog.html',
+})
+export class TrackEditorLeaveSideDialog implements OnInit {
   form: FormGroup;
   form_2: FormGroup;
 

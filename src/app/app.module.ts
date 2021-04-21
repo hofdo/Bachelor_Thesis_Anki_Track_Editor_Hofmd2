@@ -21,7 +21,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatMenuModule} from '@angular/material/menu';
 import {
   TrackEditorComponent,
-  TrackEditorExportContentDialog, TrackEditorImportContentDialog,
+  TrackEditorExportContentDialog, TrackEditorImportContentDialog, TrackEditorLeaveSideDialog,
   TrackEditorSettingsContentDialog
 } from './track-editor/track-editor.component';
 import {DigitalTwinComponent, DigitalTwinSettingsContentDialog} from './digital-twin/digital-twin.component';
@@ -46,9 +46,8 @@ import {GridsterModule} from 'angular-gridster2';
 import {HttpClientModule} from '@angular/common/http';
 import {FileSaverModule} from 'ngx-filesaver';
 import { TrackEditorGridsterItemContentComponent } from './track-editor/track-editor-gridster-item-content/track-editor-gridster-item-content.component';
-import { DigitalTwinGridsterItemContentComponent } from './digital-twin/digital-twin-gridster-item-content/digital-twin-gridster-item-content.component';
+import {TrackEditorCanDeactivateGuard} from './track-editor/track-editor-can-deactivate.guard';
 
-import { environment as env} from '../environments/environment.prod';
 
 
 @NgModule({
@@ -70,13 +69,13 @@ import { environment as env} from '../environments/environment.prod';
     TrackEditorExportContentDialog,
     TrackEditorImportContentDialog,
     TrackEditorGridsterItemContentComponent,
-    DigitalTwinGridsterItemContentComponent,
+    TrackEditorLeaveSideDialog
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot([
       {path: '', redirectTo: 'TrackEditor', pathMatch: 'full'},
-      {path: 'TrackEditor', component: TrackEditorComponent},
+      {path: 'TrackEditor', component: TrackEditorComponent, canDeactivate: [TrackEditorCanDeactivateGuard]},
       {path: 'DigitalTwin', component: DigitalTwinComponent},
     ]),
     BrowserAnimationsModule,

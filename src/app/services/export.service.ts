@@ -13,16 +13,17 @@ export class ExportService {
   ) { }
 
   exportEach(type){
-    return this.httpClient.get("http://localhost:8080/image", {
+    return this.httpClient.get("http://localhost:8081/export", {
       'responseType': 'blob',
       'params': new HttpParams().set("type", type)
     })
   }
 
   exportSingle(list, rows, cols, type){
-      return  this.httpClient.post("http://localhost:8080/exportAsSingle", list,{
+      return  this.httpClient.post("http://localhost:8081/export", list,{
       'responseType': 'blob',
       'params': new HttpParams()
+        .set("exportAs", "single")
         .set("maxRows", rows)
         .set("maxCols", cols)
         .set("fileFormat", type),

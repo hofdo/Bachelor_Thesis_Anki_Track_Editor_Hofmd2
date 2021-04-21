@@ -1,13 +1,16 @@
-import {AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {SideNavRightService} from '../services/side-nav-right.service';
 import {SideNavLeftService} from '../services/side-nav-left.service';
 import {MatDialog} from '@angular/material/dialog';
 import {CookieService} from 'ngx-cookie-service';
-import {DisplayGrid, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType} from 'angular-gridster2';
+import {GridsterConfig, GridsterItem} from 'angular-gridster2';
 import {Square} from '../model/square';
 import {GridItem} from '../model/grid-item';
-import {Subscription} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
+import {webSocket} from 'rxjs/webSocket';
+import {environment as env} from '../../environments/environment.prod';
+import {ExportService} from '../services/export.service';
 
 @Component({
   selector: 'app-digital-twin',
@@ -20,9 +23,11 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('canvas', {static: true})
   canvas: ElementRef<HTMLCanvasElement>;
 
+  subject: Subject<any> = webSocket(env.websocket.protocol + "://" + env.websocket.url + ":" + env.websocket.port);
+
   private ctx: CanvasRenderingContext2D;
-  Cols: number = 3; //default
-  Rows: number = 3; //default
+  Cols: number; //default
+  Rows: number; //default
 
   img: HTMLImageElement = new Image();
   img_car: HTMLImageElement = new Image();
@@ -39,7 +44,7 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
   squares: Square[] = [];
 
   options: GridsterConfig;
-  public grid_items: Array<GridItem> = [];
+  public grid_items: { item: GridsterItem, type: string, url: string, id: number }[] = [];
 
   public subscription: Subscription;
   public message: String;
@@ -48,11 +53,26 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
   constructor(public sidenavServiceRight: SideNavRightService,
               public sideNavServiceLeft: SideNavLeftService,
               public dialog: MatDialog,
+              public exportService: ExportService,
               public cookieService: CookieService,
               public ngZone: NgZone) {
     if (cookieService.check('dt_grid_list')) {
       this.grid_items = JSON.parse(cookieService.get('dt_grid_list'));
     }
+    if (cookieService.check('grid_options')){
+      let json = JSON.parse(cookieService.get("grid_options"))
+      this.Rows = json.rows
+      this.Cols = json.cols
+    }
+    if (cookieService.check('current_grid_img_url')){
+      this.img.src = cookieService.get("current_grid_img_url")
+    }
+
+    this.subject.subscribe(
+      msg => console.log('message received: ' + msg), // Called whenever there is a message from the server.
+      err => console.log(err), // Called if at any point WebSocket API signals some kind of error.
+      () => console.log('complete') // Called when connection is closed (for whatever reason).
+    );
   }
 
   ngOnDestroy() {
@@ -86,9 +106,11 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
       }
       this.ctx.drawImage(this.img, 0, 0, this.imgWidth, this.imgHeight);
 
-      this.colImgWidth = this.imgWidth / this.Cols;
-      this.colImgHeight = this.imgHeight / this.Rows;
+      this.colImgWidth = this.imgWidth / this.Rows;
+      this.colImgHeight = this.imgHeight / this.Cols;
 
+      console.log('cols: ' + this.Cols);
+      console.log('rows: ' + this.Rows);
       console.log('ratio: ' + wrh);
       console.log('old width: ' + this.img.height);
       console.log('new width: ' + this.imgWidth);
@@ -97,23 +119,25 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
       console.log('Col width: ' + this.colImgWidth);
       console.log('Col height: ' + this.colImgHeight);
     };
-    this.img.src = 'http://localhost:8080/test';
     this.img_car.src = 'https://i.ebayimg.com/images/g/NYEAAOSw061fm-A~/s-l640.jpg';
 
-    this.squares.push(new Square(this.ctx));
-
     this.ngZone.runOutsideAngular(() => this.tick());
-    setInterval(() => {
+    this.interval = setInterval(() => {
       this.tick();
-    }, 4000);
+    }, 2000);
   }
 
 
   private tick() {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     this.ctx.drawImage(this.img, 0, 0, this.imgWidth, this.imgHeight);
-    let thing = this.grid_items.find(value => value['_x_cord'] === 0 && value['_y_cord'] === 0);
-    this.ctx.drawImage(this.img_car, thing['_x_cord'] * this.colImgHeight + (this.colImgHeight / 2), (thing['_y_cord']) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
+    this.grid_items.forEach(value => {
+
+    })
+    let thing = this.grid_items.find(value => value.item.x === 2 && value.item.y === 1);
+    this.ctx.drawImage(this.img_car, thing.item.x * this.colImgHeight + (this.colImgHeight / 2), (thing.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
+
+
     this.requestId = requestAnimationFrame(() => this.tick);
   }
 
