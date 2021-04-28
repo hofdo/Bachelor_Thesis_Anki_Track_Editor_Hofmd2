@@ -61,7 +61,6 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
     this.options = {
       gridType: GridType.Fixed,
       displayGrid: DisplayGrid.Always,
-      itemInitCallback: this.itemInit,
       margin: 2,
       outerMarginBottom: 4,
       outerMarginTop: 4,
@@ -79,7 +78,6 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
         enabled: false
       }
     };
-    this.interval = setInterval(() => this.getActualGridImg(), 10000);
   }
 
   ngOnDestroy() {
@@ -87,11 +85,8 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
     clearInterval(this.interval);
   }
 
-  itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
-    // tslint:disable-next-line:no-console
-  }
-
   addItem(event): void {
+    //ToDo replace with env-var
     let url = 'http://localhost:8081/image?type=' + event;
     this.grid_items.push({
       'item': {x: 0, y: 0, cols: 1, rows: 1, id: this.id_counter, degree: 0},
@@ -124,7 +119,7 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
   removeEmptyGrids(rows, cols, grid_list) {
     let removeCounter_x = 0;
     let removeCounter_y = 0;
-    //Todo Put in separate function
+
     //Remove Empty Cells
     for (let x = 0; x < rows; x++) {
       if (grid_list.some(value => {
@@ -160,19 +155,6 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
       cols: cols,
       list: grid_list
     };
-  }
-
-  getActualGridImg() {
-    let res = this.removeEmptyGrids(this.maxRows, this.maxCols, this.grid_items);
-    this.cookieService.set('grid_options', JSON.stringify({
-      rows: res.rows,
-      cols: res.cols
-    }));
-    this.grid_items = res.list
-    this.exportService.exportSingle(this.grid_items, res.rows, res.cols, 'png').subscribe(data => {
-      let url = URL.createObjectURL(data);
-      this.cookieService.set('current_grid_img_url', url);
-    });
   }
 
   openDialogSettings() {
@@ -226,7 +208,6 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
               rows: rows,
               cols: cols
             }));
-            this.cookieService.set('dt_grid_list', JSON.stringify(this.grid_items));
             this.exportService.exportSingle(this.grid_items, rows, cols, fileFormat).subscribe(data => {
               this.fileSaverService.save(data, 'test.' + fileFormat);
             });
@@ -262,16 +243,38 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
-  async canDeactivate(){
-    if (this.grid_items.length > 0){
-
-    }
-    else {
-      return true
+  async canDeactivate() {
+    if (this.grid_items.length > 0) {
+      const dialogRef = this.dialog.open(TrackEditorLeaveSiteDialog, {
+        panelClass: 'te-leave-site-dialog-custom'
+      });
+      const resp = await dialogRef.afterClosed().toPromise();
+      if (resp) {
+        localStorage.setItem("dt_grid_list", JSON.stringify(this.grid_items))
+        let rows = this.maxRows;
+        let cols = this.maxCols;
+        let res = this.removeEmptyGrids(rows, cols, this.grid_items);
+        rows = res.rows;
+        cols = res.cols;
+        this.cookieService.set('grid_options', JSON.stringify({
+          rows: rows,
+          cols: cols
+        }));
+      }
+      else {
+        localStorage.removeItem("dt_grid_list")
+      }
+      return true;
+    } else {
+      return true;
     }
 
   }
 
+  resetGrid() {
+    this.grid_items = []
+    this.id_counter=1
+  }
 }
 
 @Component({
@@ -333,10 +336,10 @@ export class TrackEditorExportContentDialog implements OnInit {
 }
 
 @Component({
-  selector: 'export-content-dialog',
-  templateUrl: 'te-export-content-dialog.html',
+  selector: 'leave-site-dialog',
+  templateUrl: 'te-leave-site-dialog.html',
 })
-export class TrackEditorLeaveSideDialog implements OnInit {
+export class TrackEditorLeaveSiteDialog implements OnInit {
   form: FormGroup;
   form_2: FormGroup;
 

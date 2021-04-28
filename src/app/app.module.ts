@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
 import {RouterModule} from '@angular/router';
 import {HeaderComponent} from './header/header.component';
 import {FooterComponent} from './footer/footer.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatButtonModule} from '@angular/material/button';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule} from '@angular/material/form-field';
@@ -21,7 +21,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatMenuModule} from '@angular/material/menu';
 import {
   TrackEditorComponent,
-  TrackEditorExportContentDialog, TrackEditorImportContentDialog, TrackEditorLeaveSideDialog,
+  TrackEditorExportContentDialog, TrackEditorImportContentDialog, TrackEditorLeaveSiteDialog,
   TrackEditorSettingsContentDialog
 } from './track-editor/track-editor.component';
 import {DigitalTwinComponent, DigitalTwinSettingsContentDialog} from './digital-twin/digital-twin.component';
@@ -36,7 +36,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import { MaterialCardElevationDirective } from './material-card-elevation.directive';
+import {MaterialCardElevationDirective} from './material-card-elevation.directive';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
@@ -45,9 +45,8 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {GridsterModule} from 'angular-gridster2';
 import {HttpClientModule} from '@angular/common/http';
 import {FileSaverModule} from 'ngx-filesaver';
-import { TrackEditorGridsterItemContentComponent } from './track-editor/track-editor-gridster-item-content/track-editor-gridster-item-content.component';
+import {TrackEditorGridsterItemContentComponent} from './track-editor/track-editor-gridster-item-content/track-editor-gridster-item-content.component';
 import {TrackEditorCanDeactivateGuard} from './track-editor/track-editor-can-deactivate.guard';
-
 
 
 @NgModule({
@@ -69,7 +68,7 @@ import {TrackEditorCanDeactivateGuard} from './track-editor/track-editor-can-dea
     TrackEditorExportContentDialog,
     TrackEditorImportContentDialog,
     TrackEditorGridsterItemContentComponent,
-    TrackEditorLeaveSideDialog
+    TrackEditorLeaveSiteDialog
   ],
   imports: [
     BrowserModule,
@@ -111,4 +110,5 @@ import {TrackEditorCanDeactivateGuard} from './track-editor/track-editor-can-dea
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+}

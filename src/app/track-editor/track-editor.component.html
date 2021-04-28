@@ -8,6 +8,7 @@
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content class="work_field">
+      <button mat-button (click)="resetGrid()">Reset</button>
         <gridster [options]="options">
           <gridster-item class="" [item]="grid_item.item" *ngFor="let grid_item of grid_items">
             <app-gridster-item-content [grid_item]="grid_item" [degree]="grid_item.item.degree" (remove_grid_item)="removeItem($event)" (rotate_grid_item)="rotateItem($event)"></app-gridster-item-content>
