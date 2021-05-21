@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Settings</h2>
+<mat-dialog-content class="mat-typography">
+  <input type="file" class="file-input"
+         (change)="onFileSelected($event)" #fileUpload>
+
+  <div class="file-upload">
+
+    {{fileName || "No file uploaded yet."}}
+
+    <button mat-mini-fab color="primary" class="upload-btn"
+            (click)="fileUpload.click()">
+      <mat-icon>attach_file</mat-icon>
+    </button>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="{
+  value: false
+  }">Cancel</button>
+  <button mat-button [mat-dialog-close]="{
+  file: fileContent,
+  value: true
+  }">Import</button>
+</mat-dialog-actions>
+
+
+<!-- Copyright 2020 Google LLC. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at http://angular.io/license -->

@@ -17,21 +17,22 @@ export class TeRightSidebarContentComponent {
 
   defaultElevation = 2;
   //TODO Workaround List
-  items: {id: number, name: string, url: string, type: string}[] = [
-    {"id": 0, "name": "Straight Track Piece", "url": "http://localhost:8081/image?type=straight", "type": "straight"},
-    {"id": 1, "name": "Curve Track Piece", "url": "http://localhost:8081/image?type=curve", "type": "curve"},
-    {"id": 2, "name": "Intersection Track Piece", "url": "http://localhost:8081/image?type=intersection", "type": "intersection"}
+  items: {type: string, iconURL: string, iconName: String, track_id: string, lanes: string, left: string, right: string}[] = [
+    {"type": "straight", "iconURL": "http://localhost:8081/image?type=straight&lanes=16&track_id=0", iconName: "Straight Track Piece", track_id: "0", lanes: "0", left: "0", right: "0"},
+    {"type": "curve", "iconURL": "http://localhost:8081/image?type=curve&lanes=16&track_id=0", iconName: "Curve Track Piece", track_id: "0", lanes: "0", left: "0", right: "0"},
+    {"type": "intersection", "iconURL": "http://localhost:8081/image?type=intersection&lanes=16", iconName: "Intersection Track Piece", track_id: "0", lanes: "0", left: "0", right: "0"},
+    {"type": "junction", "iconURL": "http://localhost:8081/image?type=junction&lanes=16&track_id=0&left=8&right=8", iconName: "Junction Track Piece", track_id: "0", lanes: "0", left: "0", right: "0"}
     ];
 
   openDialog(data) {
     const dialogRef = this.dialog.open(TrackEditorRightSidebarDialog, {
       width: '40%',
       panelClass: 'te-right-sidebar-dialog-custom',
-      data: {name: data.name, url: data.url, type: data.type}
+      data: {name: data.iconName, url: data.iconURL, type: data.type}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.addTrackPiece(result.type);
+      this.addTrackPiece(result);
     });
   }
 

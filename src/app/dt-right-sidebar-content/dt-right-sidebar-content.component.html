@@ -2,14 +2,29 @@
   <div *cdkVirtualFor="let car of observable" class="example-item">
     <mat-card  appMaterialElevation [defaultElevation]="defaultElevation" raisedElevation="8">
       <img mat-card-image src="https://i.ebayimg.com/images/g/NYEAAOSw061fm-A~/s-l640.jpg" class="card-image" alt="">
-      <mat-card-title>{{}}</mat-card-title>
+      <mat-card-title>{{car}}</mat-card-title>
       <mat-card-content>
-
+        <mat-form-field>
+          <mat-label>Speed</mat-label>
+          <input matInput placeholder="0" [value]="this.cars.get(car).speed" readonly>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Lane</mat-label>
+          <input matInput placeholder="0" [value]="this.cars.get(car).offset" readonly>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Track Piece</mat-label>
+          <input matInput placeholder="0" [value]="this.cars.get(car).lastTrackPieceID.toString()" readonly>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Track Location</mat-label>
+          <input matInput placeholder="0" [value]="this.cars.get(car).lastTrackPositionID.toString()" readonly>
+        </mat-form-field>
       </mat-card-content>
       <mat-card-actions align="end">
         <button mat-icon-button (click)="openDialog(car)"><mat-icon>fullscreen</mat-icon></button>
         <span class="fill-space"></span>
-        <button mat-flat-button color="primary" (click)="openBottomSheet()" >Console</button>
+        <button mat-flat-button color="primary" (click)="openBottomSheet(car)" >Console</button>
       </mat-card-actions>
     </mat-card>
   </div>

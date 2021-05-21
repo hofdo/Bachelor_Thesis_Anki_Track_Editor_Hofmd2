@@ -11,6 +11,8 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {interval, Subject} from 'rxjs';
 import {CookieService} from 'ngx-cookie-service';
+import {Router, UrlSerializer} from '@angular/router';
+import {HttpParams} from '@angular/common/http';
 
 @Component({
   selector: 'app-track-editor',
@@ -37,7 +39,9 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
               public exportService: ExportService,
               public fileSaverService: FileSaverService,
               public snackBar: MatSnackBar,
-              public cookieService: CookieService) {
+              public cookieService: CookieService,
+              public router: Router,
+              public serializer: UrlSerializer) {
 
     //ToDo Replace Cookies with LocalStorage
     if (cookieService.check('grid_list')) {
@@ -87,10 +91,41 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
 
   addItem(event): void {
     //ToDo replace with env-var
-    let url = 'http://localhost:8081/image?type=' + event;
+    console.log(event);
+    let param
+    let item
+    //let url = 'http://localhost:8081/image?type=straight&lanes=16&track_id=0';
+    switch (event.type) {
+      case 'straight':
+        param = new HttpParams().set("type", "straight")
+          .set("lanes", event.lanes)
+          .set("track_id", event.track_id);
+        item = {x: 0, y: 0, cols: 1, rows: 1, id: this.id_counter, degree: 0, lanes: event.lanes, track_id: event.track_id}
+        break;
+      case 'curve':
+        param = new HttpParams().set("type", "curve")
+          .set("lanes", event.lanes)
+          .set("track_id", event.track_id);
+        item = {x: 0, y: 0, cols: 1, rows: 1, id: this.id_counter, degree: 0, lanes: event.lanes, track_id: event.track_id}
+        break;
+      case 'intersection':
+        param = new HttpParams().set("type", "intersection")
+          .set("lanes", event.lanes);
+        item = {x: 0, y: 0, cols: 1, rows: 1, id: this.id_counter, degree: 0, lanes: event.lanes}
+        break;
+      case "junction":
+        param = new HttpParams().set("type", "junction")
+          .set("lanes", event.lanes)
+          .set("track_id", event.track_id)
+          .set("left", event.left)
+          .set("right", event.right);
+        item = {x: 0, y: 0, cols: 1, rows: 1, id: this.id_counter, degree: 0, lanes: event.lanes, track_id: event.track_id}
+        break;
+    }
+    let url = 'http://localhost:8081/image?' + param.toString();
     this.grid_items.push({
-      'item': {x: 0, y: 0, cols: 1, rows: 1, id: this.id_counter, degree: 0},
-      'type': event,
+      'item': item,
+      'type': event.type,
       'url': url,
       'id': this.id_counter
     });
@@ -184,7 +219,7 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
           //Export each grid tile as a single image
           if (this.grid_items.length !== 0) {
             this.grid_items.forEach(value => {
-              this.exportService.exportEach(value.type).subscribe(data => {
+              this.exportService.exportEach(value.type, value.item.lanes, value.item.track_id).subscribe(data => {
                 this.fileSaverService.save(data, value.type + '.' + fileFormat);
               });
             });
@@ -243,6 +278,9 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Guard implemented to ask the user if he wishes to transport the current track to the digital twin view or not
+   */
   async canDeactivate() {
     if (this.grid_items.length > 0) {
       const dialogRef = this.dialog.open(TrackEditorLeaveSiteDialog, {
@@ -250,7 +288,7 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
       });
       const resp = await dialogRef.afterClosed().toPromise();
       if (resp) {
-        localStorage.setItem("dt_grid_list", JSON.stringify(this.grid_items))
+        localStorage.setItem('dt_grid_list', JSON.stringify(this.grid_items));
         let rows = this.maxRows;
         let cols = this.maxCols;
         let res = this.removeEmptyGrids(rows, cols, this.grid_items);
@@ -260,9 +298,8 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
           rows: rows,
           cols: cols
         }));
-      }
-      else {
-        localStorage.removeItem("dt_grid_list")
+      } else {
+        localStorage.removeItem('dt_grid_list');
       }
       return true;
     } else {
@@ -272,8 +309,8 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   resetGrid() {
-    this.grid_items = []
-    this.id_counter=1
+    this.grid_items = [];
+    this.id_counter = 1;
   }
 }
 

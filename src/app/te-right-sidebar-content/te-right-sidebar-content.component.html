@@ -1,13 +1,33 @@
 <cdk-virtual-scroll-viewport itemSize="3" class="example-viewport">
   <div *cdkVirtualFor="let item of items" class="example-item">
     <mat-card appMaterialElevation [defaultElevation]="defaultElevation" raisedElevation="8">
-      <img mat-card-image src="{{item.url}}" class="" width="60" alt="">
-      <mat-card-title>{{item.name}}</mat-card-title>
+      <img mat-card-image src="{{item.iconURL}}" class="" width="60" alt="">
+      <mat-card-title>{{item.iconName}}</mat-card-title>
       <mat-card-content>
+        <mat-form-field *ngIf="item.type !== 'intersection'" appearance="fill">
+          <mat-label>Track ID</mat-label>
+          <input matInput [(ngModel)]="item.track_id">
+        </mat-form-field>
+        <p></p>
+        <mat-form-field appearance="fill">
+          <mat-label>Lanes</mat-label>
+          <input matInput [(ngModel)]="item.lanes">
+        </mat-form-field>
+        <p></p>
+        <div *ngIf="item.type === 'junction'">
+        <mat-form-field appearance="fill">
+          <mat-label>Left</mat-label>
+          <input matInput [(ngModel)]="item.left">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Right</mat-label>
+          <input matInput [(ngModel)]="item.right">
+        </mat-form-field>
+        </div>
       </mat-card-content>
       <mat-card-actions>
         <button mat-icon-button (click)="openDialog(item)"><mat-icon>fullscreen</mat-icon></button>
-        <button mat-icon-button (click)="addTrackPiece(item.type)" ><mat-icon>add_circle_outline</mat-icon></button>
+        <button mat-icon-button (click)="addTrackPiece(item)" ><mat-icon>add_circle_outline</mat-icon></button>
       </mat-card-actions>
     </mat-card>
   </div>

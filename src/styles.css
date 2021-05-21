@@ -38,6 +38,10 @@
   display: none;
 }
 
+.dt-import-dialog-custom .file-input {
+  display: none;
+}
+
 .dt-bottom-sheet-console {
   width: auto;
   height: auto;

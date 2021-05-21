@@ -24,7 +24,11 @@ import {
   TrackEditorExportContentDialog, TrackEditorImportContentDialog, TrackEditorLeaveSiteDialog,
   TrackEditorSettingsContentDialog
 } from './track-editor/track-editor.component';
-import {DigitalTwinComponent, DigitalTwinSettingsContentDialog} from './digital-twin/digital-twin.component';
+import {
+  DigitalTwinComponent,
+  DigitalTwinImportContentDialog,
+  DigitalTwinSettingsContentDialog
+} from './digital-twin/digital-twin.component';
 import {
   DigitalTwinRightSidebarConsole,
   DigitalTwinRightSidebarDialog,
@@ -47,7 +51,17 @@ import {HttpClientModule} from '@angular/common/http';
 import {FileSaverModule} from 'ngx-filesaver';
 import {TrackEditorGridsterItemContentComponent} from './track-editor/track-editor-gridster-item-content/track-editor-gridster-item-content.component';
 import {TrackEditorCanDeactivateGuard} from './track-editor/track-editor-can-deactivate.guard';
+import {
+  IMqttMessage,
+  MqttModule,
+  IMqttServiceOptions
+} from 'ngx-mqtt';
 
+export const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
+  hostname: '192.168.1.121',
+  port: 9001,
+  path: '/mqtt'
+};
 
 @NgModule({
   declarations: [
@@ -68,7 +82,8 @@ import {TrackEditorCanDeactivateGuard} from './track-editor/track-editor-can-dea
     TrackEditorExportContentDialog,
     TrackEditorImportContentDialog,
     TrackEditorGridsterItemContentComponent,
-    TrackEditorLeaveSiteDialog
+    TrackEditorLeaveSiteDialog,
+    DigitalTwinImportContentDialog
   ],
   imports: [
     BrowserModule,
@@ -102,7 +117,8 @@ import {TrackEditorCanDeactivateGuard} from './track-editor/track-editor-can-dea
     GridsterModule,
     HttpClientModule,
     FileSaverModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MqttModule.forRoot(MQTT_SERVICE_OPTIONS)
   ],
   providers: [
     SideNavLeftService,

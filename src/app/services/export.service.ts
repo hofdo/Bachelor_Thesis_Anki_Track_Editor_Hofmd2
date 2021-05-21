@@ -12,10 +12,12 @@ export class ExportService {
     private fileSaverService: FileSaverService
   ) { }
 
-  exportEach(type){
-    return this.httpClient.get("http://localhost:8081/export", {
+  exportEach(type, lanes, track_id){
+    return this.httpClient.get("http://localhost:8081/image", {
       'responseType': 'blob',
       'params': new HttpParams().set("type", type)
+        .set("lanes", lanes)
+        .set("track_id", track_id)
     })
   }
 
@@ -23,7 +25,6 @@ export class ExportService {
       return  this.httpClient.post("http://localhost:8081/export", list,{
       'responseType': 'blob',
       'params': new HttpParams()
-        .set("exportAs", "single")
         .set("maxRows", rows)
         .set("maxCols", cols)
         .set("fileFormat", type),

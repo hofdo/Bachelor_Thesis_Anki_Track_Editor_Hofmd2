@@ -1,6 +1,6 @@
-import {Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
-import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import {MAT_BOTTOM_SHEET_DATA, MatBottomSheet} from '@angular/material/bottom-sheet';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Car} from '../model/car';
 import {BehaviorSubject, Subscription} from 'rxjs';
@@ -11,39 +11,55 @@ import {DtCarListSharingService} from '../services/dt-car-list-sharing.service';
   templateUrl: './dt-right-sidebar-content.component.html',
   styleUrls: ['./dt-right-sidebar-content.component.css']
 })
-export class DtRightSidebarContentComponent implements OnInit, OnDestroy{
+export class DtRightSidebarContentComponent implements OnInit, OnDestroy {
 
-  cars: Car[] = []
-  car_ids: String[] = []
+  @Output() console_mqtt_msg: EventEmitter<any> = new EventEmitter<any>()
+
+  cars: Map<string, Car>;
+  car_ids: String[] = [];
   subscription: Subscription;
-  observable = new BehaviorSubject<String[]>([])
+  observable = new BehaviorSubject<String[]>([]);
 
   constructor(
     public dialog: MatDialog,
     public _snackBar: MatSnackBar,
     public _bottomSheet: MatBottomSheet,
     public dataService: DtCarListSharingService
-    ){
+  ) {
   }
 
   defaultElevation = 2;
 
   ngOnInit(): void {
     this.subscription = this.dataService.currentMessage.subscribe(message => {
-      this.cars = message.get("car_list")
-      this.car_ids = message.get("car_ids")
-
-      this.observable.next(this.car_ids)
-    })
+      if (message !== null) {
+        this.cars = message.get('car_list');
+        this.car_ids = message.get('car_ids');
+        this.observable.next(this.car_ids);
+      }
+      /*
+      message.get("car_ids").forEach(car => {
+       if (!(this.car_ids.some(value => {
+          return value === car
+        }))){
+         this.car_ids = message.get("car_ids")
+         this.observable.next(this.car_ids)
+       }
+      })
+      */
+    });
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe()
+    this.subscription.unsubscribe();
   }
 
-  openBottomSheet(): void {
+  openBottomSheet(car_id): void {
     this._bottomSheet.open(DigitalTwinRightSidebarConsole, {
-      panelClass: "dt-bottom-sheet-console"
+      panelClass: 'dt-bottom-sheet-console',
+      data: {car: car_id, cars: this.cars}
+    }).afterDismissed().subscribe(data => {
+      this.console_mqtt_msg.emit(data)
     });
   }
 
@@ -57,7 +73,7 @@ export class DtRightSidebarContentComponent implements OnInit, OnDestroy{
     const dialogRef = this.dialog.open(DigitalTwinRightSidebarDialog, {
       width: '30%',
       panelClass: 'dt-right-sidebar-dialog-custom',
-      data: car
+      data: {cars: this.cars, car: car}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -73,15 +89,33 @@ export class DtRightSidebarContentComponent implements OnInit, OnDestroy{
   templateUrl: 'dt-right-sidebar-dialog.html',
 })
 export class DigitalTwinRightSidebarDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public car:Car) {
-
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { cars: Map<string, Car>, car: string }) {
   }
 }
 
 @Component({
   selector: 'dt-right-sidebar-console',
   templateUrl: 'dt-right-sidebar-console.html',
+
 })
-export class DigitalTwinRightSidebarConsole {}
+export class DigitalTwinRightSidebarConsole {
+
+  car: Car = this.data.cars.get(this.data.car)
+
+  pubData = {
+    speed: this.car.speed,
+    acceleration: 0,
+    lane: this.car.offset,
+    id: this.data.car
+  }
+
+  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: { car: string, cars: Map<string, Car> }, private bottomSheetRef: MatBottomSheet) {
+  }
+
+  closeBottomSheet() {
+    this.bottomSheetRef.dismiss(this.pubData);
+  }
+}
 
 

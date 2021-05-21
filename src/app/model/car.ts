@@ -2,66 +2,36 @@ import {TrackPiece} from './TrackPieces/track-piece';
 
 export class Car {
 
-  private _address: string;
-  private _identifier: string;
-  private _model: string;
-  private _modelId: string;
-  private _productId: string;
-  private _isCharging: string;
-  private _isOnTrack: string;
-  private _version: string;
-  private _batteryLevel: string;
-  private _offset: string;
-  private _speed: string;
-  private _lastTrackPieceID: number
-  private _lastTrackPositionID: number
-  private _leftWheelDistance: number
-  private _rightWheelDistance: number
+  private _address: string = "";
+  private _identifier: string = "";
+  private _model: string = "";
+  private _modelId: string = "";
+  private _productId: string = "";
+  private _isCharging: boolean = false;
+  private _isOnTrack: boolean = false;
+  private _version: string = "";
+  private _batteryLevel: string = "";
+  private _offset: string = "0";
+  private _speed: string = "0";
+  private _currentTrackPieceID: number = 0
+  private _lastTrackPieceID: number = 0
+  private _lastTrackPositionID: number = 0
+  private _leftWheelDistance: number = 0
+  private _rightWheelDistance: number = 0
   private _isReverse: boolean
-  private _isExiting: boolean
+  private _isExiting: boolean = false
   private _isDelocalized: boolean
 
   constructor() {
   }
 
-  get isDelocalized(): boolean {
-    return this._isDelocalized;
+
+  get currentTrackPieceID(): number {
+    return this._currentTrackPieceID;
   }
 
-  set isDelocalized(value: boolean) {
-    this._isDelocalized = value;
-  }
-
-  get isExiting(): boolean {
-    return this._isExiting;
-  }
-
-  set isExiting(value: boolean) {
-    this._isExiting = value;
-  }
-
-  get isReverse(): boolean {
-    return this._isReverse;
-  }
-
-  set isReverse(value: boolean) {
-    this._isReverse = value;
-  }
-
-  get lastTrackPieceID(): number {
-    return this._lastTrackPieceID;
-  }
-
-  set lastTrackPieceID(value: number) {
-    this._lastTrackPieceID = value;
-  }
-
-  get lastTrackPositionID(): number {
-    return this._lastTrackPositionID;
-  }
-
-  set lastTrackPositionID(value: number) {
-    this._lastTrackPositionID = value;
+  set currentTrackPieceID(value: number) {
+    this._currentTrackPieceID = value;
   }
 
   get address(): string {
@@ -104,19 +74,19 @@ export class Car {
     this._productId = value;
   }
 
-  get isCharging(): string {
+  get isCharging(): boolean {
     return this._isCharging;
   }
 
-  set isCharging(value: string) {
+  set isCharging(value: boolean) {
     this._isCharging = value;
   }
 
-  get isOnTrack(): string {
+  get isOnTrack(): boolean {
     return this._isOnTrack;
   }
 
-  set isOnTrack(value: string) {
+  set isOnTrack(value: boolean) {
     this._isOnTrack = value;
   }
 
@@ -152,6 +122,22 @@ export class Car {
     this._speed = value;
   }
 
+  get lastTrackPieceID(): number {
+    return this._lastTrackPieceID;
+  }
+
+  set lastTrackPieceID(value: number) {
+    this._lastTrackPieceID = value;
+  }
+
+  get lastTrackPositionID(): number {
+    return this._lastTrackPositionID;
+  }
+
+  set lastTrackPositionID(value: number) {
+    this._lastTrackPositionID = value;
+  }
+
   get leftWheelDistance(): number {
     return this._leftWheelDistance;
   }
@@ -166,5 +152,29 @@ export class Car {
 
   set rightWheelDistance(value: number) {
     this._rightWheelDistance = value;
+  }
+
+  get isReverse(): boolean {
+    return this._isReverse;
+  }
+
+  set isReverse(value: boolean) {
+    this._isReverse = value;
+  }
+
+  get isExiting(): boolean {
+    return this._isExiting;
+  }
+
+  set isExiting(value: boolean) {
+    this._isExiting = value;
+  }
+
+  get isDelocalized(): boolean {
+    return this._isDelocalized;
+  }
+
+  set isDelocalized(value: boolean) {
+    this._isDelocalized = value;
   }
 }
