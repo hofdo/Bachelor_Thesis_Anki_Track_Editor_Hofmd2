@@ -5,7 +5,6 @@ import {SideNavLeftService} from '../services/side-nav-left.service';
 import {MatDialog} from '@angular/material/dialog';
 import {CookieService} from 'ngx-cookie-service';
 import {GridsterConfig, GridsterItem} from 'angular-gridster2';
-import {Square} from '../model/square';
 import {Subject, Subscription} from 'rxjs';
 import {webSocket} from 'rxjs/webSocket';
 import {environment as env} from '../../environments/environment.prod';
