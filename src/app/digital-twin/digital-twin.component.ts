@@ -409,6 +409,7 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 }
 
+// @ts-ignore
 @Component({
   selector: 'dt-settings-content-dialog',
   templateUrl: 'dt-settings-content-dialog.html',
@@ -416,6 +417,7 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
 export class DigitalTwinSettingsContentDialog {
 }
 
+// @ts-ignore
 @Component({
   selector: 'dt-import-content-dialog',
   templateUrl: 'dt-import-content-dialog.html',
