@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { CanDeactivate} from '@angular/router';
 import {TrackEditorComponent} from './track-editor.component';
 
 @Injectable({

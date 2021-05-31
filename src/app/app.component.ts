@@ -1,5 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-root',

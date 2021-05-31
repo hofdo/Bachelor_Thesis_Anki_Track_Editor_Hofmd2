@@ -5,15 +5,12 @@ import {SideNavLeftService} from '../services/side-nav-left.service';
 import {MatDialog} from '@angular/material/dialog';
 import {CookieService} from 'ngx-cookie-service';
 import {GridsterConfig, GridsterItem} from 'angular-gridster2';
-import {Square} from '../model/square';
 import {Subject, Subscription} from 'rxjs';
-import {webSocket} from 'rxjs/webSocket';
 import {environment as env} from '../../environments/environment.prod';
 import {ExportService} from '../services/export.service';
 import {Car} from '../model/car';
 import {DtCarListSharingService} from '../services/dt-car-list-sharing.service';
 import {IMqttMessage, MqttService} from 'ngx-mqtt';
-import {element} from 'protractor';
 
 @Component({
   selector: 'app-digital-twin',
@@ -25,9 +22,6 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('sidenav_left') public sidenav_left: MatSidenav;
   @ViewChild('canvas', {static: true})
   canvas: ElementRef<HTMLCanvasElement>;
-
-  subject: Subject<any> = webSocket(env.websocket.protocol + '://' + env.websocket.url + ':' + env.websocket.port);
-
   private ctx: CanvasRenderingContext2D;
   Cols: number; //default
   Rows: number; //default
@@ -44,7 +38,6 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
 
   requestId;
   interval;
-  squares: Square[] = [];
 
   options: GridsterConfig;
   public grid_items: { item: GridsterItem, type: string, url: string, id: number }[] = [];
@@ -86,16 +79,6 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
   ngAfterViewInit() {
     this.sidenavServiceRight.setSidenav(this.sidenav_right);
     this.sideNavServiceLeft.setSidenav(this.sidenav_left);
-
-    //Send the backend the request to get the information about how many cars are currently connected to the controller
-    /*
-     this.subject.next({
-       'command': 'Cars'
-     });
-
-     */
-
-
   }
 
   ngOnInit(): void {

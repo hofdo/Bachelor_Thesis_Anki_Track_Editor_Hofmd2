@@ -1,4 +1,3 @@
-import {TrackPiece} from './TrackPieces/track-piece';
 
 export class Car {
 

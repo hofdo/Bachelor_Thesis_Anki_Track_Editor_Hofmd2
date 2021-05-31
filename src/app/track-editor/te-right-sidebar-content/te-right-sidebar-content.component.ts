@@ -1,6 +1,5 @@
-import {Component, Inject, Input, OnInit, Output} from '@angular/core';
+import {Component, Inject, Output} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
-import {TrackEditorComponent} from '../track-editor/track-editor.component';
 import { EventEmitter } from '@angular/core';
 
 @Component({

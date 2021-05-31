@@ -1,8 +1,6 @@
 import {Component, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import { EventEmitter } from '@angular/core';
-import {GridsterItem} from 'angular-gridster2';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {Observable, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-gridster-item-content',

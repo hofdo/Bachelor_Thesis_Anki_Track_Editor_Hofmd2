@@ -2,9 +2,9 @@ import {Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output} from 
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheet} from '@angular/material/bottom-sheet';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Car} from '../model/car';
+import {Car} from '../../model/car';
 import {BehaviorSubject, Subscription} from 'rxjs';
-import {DtCarListSharingService} from '../services/dt-car-list-sharing.service';
+import {DtCarListSharingService} from '../../services/dt-car-list-sharing.service';
 
 @Component({
   selector: 'app-dt-right-sidebar-content',

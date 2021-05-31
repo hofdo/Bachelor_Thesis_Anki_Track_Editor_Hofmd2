@@ -1,5 +1,4 @@
 import {Component, OnInit, Output} from '@angular/core';
-import {Router} from '@angular/router';
 import {SideNavRightService} from '../services/side-nav-right.service';
 import {SideNavLeftService} from '../services/side-nav-left.service';
 
