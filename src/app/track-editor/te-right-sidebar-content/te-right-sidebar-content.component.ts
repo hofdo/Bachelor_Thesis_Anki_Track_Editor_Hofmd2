@@ -43,7 +43,7 @@ export class TeRightSidebarContentComponent {
 
 @Component({
   selector: 'te-right-sidebar-content-dialog',
-  templateUrl: 'te-right-sidebar-dialog.html'
+  templateUrl: '../dialog/te-right-sidebar-dialog.html'
 })
 export class TrackEditorRightSidebarDialog {
 

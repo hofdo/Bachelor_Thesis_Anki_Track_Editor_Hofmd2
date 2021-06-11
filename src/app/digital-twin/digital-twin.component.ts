@@ -6,7 +6,6 @@ import {MatDialog} from '@angular/material/dialog';
 import {CookieService} from 'ngx-cookie-service';
 import {GridsterConfig, GridsterItem} from 'angular-gridster2';
 import {Subject, Subscription} from 'rxjs';
-import {environment as env} from '../../environments/environment.prod';
 import {ExportService} from '../services/export.service';
 import {Car} from '../model/car';
 import {DtCarListSharingService} from '../services/dt-car-list-sharing.service';
@@ -50,7 +49,7 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
   public host_event_subscription: Subscription;
   public host_status_subscription: Subscription;
   public message: String;
-  public topic: string = '/test';
+  //public topic: string = '/test';
 
   constructor(public sidenavServiceRight: SideNavRightService,
               public sideNavServiceLeft: SideNavLeftService,
@@ -88,6 +87,7 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
       this.Rows = json.rows;
       this.Cols = json.cols;
     }
+
     if (localStorage.getItem('dt_grid_list') !== null) {
       this.grid_items = JSON.parse(localStorage.getItem('dt_grid_list'));
       this.exportService.exportSingle(this.grid_items, this.Rows, this.Cols, 'png').subscribe(data => {
@@ -395,7 +395,7 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
 // @ts-ignore
 @Component({
   selector: 'dt-settings-content-dialog',
-  templateUrl: 'dt-settings-content-dialog.html',
+  templateUrl: 'dialog/dt-settings-content-dialog.html',
 })
 export class DigitalTwinSettingsContentDialog {
 }
@@ -403,7 +403,7 @@ export class DigitalTwinSettingsContentDialog {
 // @ts-ignore
 @Component({
   selector: 'dt-import-content-dialog',
-  templateUrl: 'dt-import-content-dialog.html',
+  templateUrl: 'dialog/dt-import-content-dialog.html',
 })
 export class DigitalTwinImportContentDialog {
   fileContent = '';

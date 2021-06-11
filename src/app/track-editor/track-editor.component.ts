@@ -83,7 +83,8 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.cookieService.set('grid_list', JSON.stringify(this.grid_items));
+    //this.cookieService.set('grid_list', JSON.stringify(this.grid_items));
+    localStorage.setItem("dt_grid_list", JSON.stringify(this.grid_items))
     clearInterval(this.interval);
   }
 
@@ -314,7 +315,7 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
 
 @Component({
   selector: 'settings-content-dialog',
-  templateUrl: 'te-settings-content-dialog.html',
+  templateUrl: 'dialog/te-settings-content-dialog.html',
 })
 export class TrackEditorSettingsContentDialog {
   constructor(@Inject(MAT_DIALOG_DATA) public data: {
@@ -326,7 +327,7 @@ export class TrackEditorSettingsContentDialog {
 
 @Component({
   selector: 'import-content-dialog',
-  templateUrl: 'te-import-content-dialog.html',
+  templateUrl: 'dialog/te-import-content-dialog.html',
 })
 export class TrackEditorImportContentDialog {
   fileContent = '';
@@ -353,7 +354,7 @@ export class TrackEditorImportContentDialog {
 
 @Component({
   selector: 'export-content-dialog',
-  templateUrl: 'te-export-content-dialog.html',
+  templateUrl: 'dialog/te-export-content-dialog.html',
 })
 export class TrackEditorExportContentDialog implements OnInit {
   form: FormGroup;
@@ -372,7 +373,7 @@ export class TrackEditorExportContentDialog implements OnInit {
 
 @Component({
   selector: 'leave-site-dialog',
-  templateUrl: 'te-leave-site-dialog.html',
+  templateUrl: 'dialog/te-leave-site-dialog.html',
 })
 export class TrackEditorLeaveSiteDialog implements OnInit {
   form: FormGroup;

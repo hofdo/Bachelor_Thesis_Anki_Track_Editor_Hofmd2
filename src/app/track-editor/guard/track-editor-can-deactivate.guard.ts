@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanDeactivate} from '@angular/router';
-import {TrackEditorComponent} from './track-editor.component';
+import {TrackEditorComponent} from '../track-editor.component';
 
 @Injectable({
   providedIn: 'root'

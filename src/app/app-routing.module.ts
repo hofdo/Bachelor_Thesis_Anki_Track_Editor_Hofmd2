@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import {TrackEditorCanDeactivateGuard} from './track-editor/guard/track-editor-can-deactivate.guard';
 
 const routes: Routes = [
   {
@@ -9,16 +10,18 @@ const routes: Routes = [
   },
   {
     path: 'TrackEditor',
-    loadChildren: () => import('./track-editor/track-editor.module').then(m => m.TrackEditorModule)
+    loadChildren: () => import('./track-editor/track-editor.module').then(m => m.TrackEditorModule),
   },
   {
     path: 'DigitalTwin',
-    loadChildren: () => import('./digital-twin/digital-twin.module').then(m => m.DigitalTwinModule)
+    loadChildren: () => import('./digital-twin/digital-twin.module').then(m => m.DigitalTwinModule),
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot(routes),
+  ],
+  exports: [RouterModule],
 })
 export class AppRoutingModule { }

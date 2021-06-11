@@ -37,16 +37,6 @@ export class DtRightSidebarContentComponent implements OnInit, OnDestroy {
         this.car_ids = message.get('car_ids');
         this.observable.next(this.car_ids);
       }
-      /*
-      message.get("car_ids").forEach(car => {
-       if (!(this.car_ids.some(value => {
-          return value === car
-        }))){
-         this.car_ids = message.get("car_ids")
-         this.observable.next(this.car_ids)
-       }
-      })
-      */
     });
   }
 
@@ -86,7 +76,7 @@ export class DtRightSidebarContentComponent implements OnInit, OnDestroy {
 
 @Component({
   selector: 'dt-right-sidebar-content-dialog',
-  templateUrl: 'dt-right-sidebar-dialog.html',
+  templateUrl: '../dialog/dt-right-sidebar-dialog.html',
 })
 export class DigitalTwinRightSidebarDialog {
   constructor(
