@@ -1,3 +1,11 @@
+/**
+ * Implemented solution from stackoverflow thread from author Nickson
+ *
+ * Author: https://stackoverflow.com/users/4547873/nickson
+ *
+ * URL: https://stackoverflow.com/questions/44593237/elevate-md-card-in-angular-material
+ */
+
 import { Directive, ElementRef, HostListener, Input, Renderer2, OnChanges, SimpleChanges } from '@angular/core';
 
 @Directive({

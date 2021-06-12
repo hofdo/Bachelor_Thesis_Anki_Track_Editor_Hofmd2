@@ -27,7 +27,15 @@ export class TeRightSidebarContentComponent {
     const dialogRef = this.dialog.open(TrackEditorRightSidebarDialog, {
       width: '40%',
       panelClass: 'te-right-sidebar-dialog-custom',
-      data: {name: data.iconName, url: data.iconURL, type: data.type}
+      data: {
+        name: data.iconName,
+        url: data.iconURL,
+        type: data.type,
+        lanes: data.lanes,
+        track_id: data.track_id,
+        left: data.left,
+        right: data.right
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -47,8 +55,14 @@ export class TeRightSidebarContentComponent {
 })
 export class TrackEditorRightSidebarDialog {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {name: string, url: string, type: string}) { }
-
-
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {
+    name: string,
+    url: string,
+    type: string,
+    lanes: string,
+    track_id: string,
+    left: number,
+    right: number
+  }) { }
 
 }

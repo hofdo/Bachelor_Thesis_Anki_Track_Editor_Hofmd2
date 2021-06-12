@@ -1,3 +1,27 @@
+/**
+ *
+ * The MIT License
+
+ Copyright (c) 2010-2021 Google LLC. http://angular.io/license
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+ rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of
+ the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+ */
+
+
 import {AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {SideNavRightService} from '../services/side-nav-right.service';
@@ -10,6 +34,8 @@ import {ExportService} from '../services/export.service';
 import {Car} from '../model/car';
 import {DtCarListSharingService} from '../services/dt-car-list-sharing.service';
 import {IMqttMessage, MqttService} from 'ngx-mqtt';
+import {environment} from '../../environments/environment';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-digital-twin',
@@ -148,8 +174,14 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
       if (this.cars.size > 0) {
         this.cars.forEach(car => {
           let grid = this.grid_items.find(grid => {
-            return grid.id == car.currentTrackPieceID;
+            return grid.item.track_id == car.currentTrackPieceID;
           });
+          if (grid !== undefined){
+            this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
+          }
+          console.log(this.cars.get("f4c22c6c0382").lastTrackPieceID)
+          console.log(this.grid_items)
+          /*
           if (grid !== undefined) {
             let location_id_mod = car.currentTrackPieceID%3
             this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
@@ -216,6 +248,8 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
                 break
             }
           }
+
+           */
         });
       }
     }
@@ -368,7 +402,7 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
     const dialogRef = this.dialog.open(DigitalTwinSettingsContentDialog);
 
     dialogRef.afterClosed().subscribe(result => {
-      //console.log(`Dialog result: ${result}`);
+        localStorage.setItem("mqtt_broker", result)
     });
   }
 
@@ -378,8 +412,8 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(_import => {
-      this.grid_items.splice(0, this.grid_items.length);
       if (_import.value) {
+        this.grid_items.splice(0, this.grid_items.length);
         let imported_grid_items = JSON.parse(_import.file);
         imported_grid_items.forEach(v => {
           this.grid_items.push(v);
@@ -397,7 +431,18 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
   selector: 'dt-settings-content-dialog',
   templateUrl: 'dialog/dt-settings-content-dialog.html',
 })
-export class DigitalTwinSettingsContentDialog {
+export class DigitalTwinSettingsContentDialog implements OnInit{
+  settings_mqtt_broker;
+  form: FormGroup;
+
+  constructor(public fb: FormBuilder) {
+  }
+
+  ngOnInit(): void {
+    this.form = this.fb.group({
+      'mqtt_setting': ['', Validators.required],
+    });
+  }
 }
 
 // @ts-ignore
@@ -408,7 +453,7 @@ export class DigitalTwinSettingsContentDialog {
 export class DigitalTwinImportContentDialog {
   fileContent = '';
   fileName = '';
-
+  is_file_valid = false
   constructor() {
   }
 
@@ -419,10 +464,14 @@ export class DigitalTwinImportContentDialog {
     this.fileName = file.name;
 
     if (file) {
+      this.is_file_valid = true
       fileReader.onload = ev => {
         this.fileContent = ev.target.result.toString();
       };
       fileReader.readAsText(file);
+    }
+    else {
+      this.is_file_valid = false
     }
   }
 

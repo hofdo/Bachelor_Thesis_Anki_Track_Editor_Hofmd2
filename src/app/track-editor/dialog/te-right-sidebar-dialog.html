@@ -2,7 +2,32 @@
   <mat-dialog-content class="te-dialog-container">
     <img class="te-dialog-img" src="{{data.url}}" mat-card-image>
     <h2 mat-dialog-title>{{data.name}}</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras finibus nibh accumsan tellus sollicitudin suscipit. Donec dignissim lacinia sodales. Sed lorem nisl, vestibulum at pellentesque sit amet, sollicitudin lobortis lorem. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent mattis metus id lacus ultricies, vel commodo odio tempus. Duis suscipit et tellus sed sodales. Integer volutpat dolor est, non ornare augue consequat sit amet. Mauris vel nisi quis mi condimentum pharetra. Nulla consequat ipsum ac tincidunt elementum. Cras id ante porttitor, viverra odio vitae, ornare massa. Phasellus consequat ligula magna, at efficitur enim blandit at. Pellentesque varius in sem ut commodo. Morbi egestas nunc at metus vehicula, quis porta elit dictum. Cras lectus mi, dignissim sed ligula vitae, molestie egestas dolor. Donec finibus, neque non semper pulvinar, nulla elit ultricies augue, non pharetra nunc felis vitae quam.</p>
+    <p *ngIf="data.type === 'straight'">A straight track piece by Anki Overdrive</p>
+    <p *ngIf="data.type === 'curve'">A curve track piece by Anki Overdrive</p>
+    <p *ngIf="data.type === 'intersection'">A intersection track piece by Anki Overdrive</p>
+    <p *ngIf="data.type === 'junction'">A junction track piece</p>
+
+    <mat-form-field *ngIf="data.type !== 'intersection'" appearance="fill">
+      <mat-label>Track ID</mat-label>
+      <input matInput [(ngModel)]="data.track_id">
+    </mat-form-field>
+    <p></p>
+    <mat-form-field appearance="fill">
+      <mat-label>Lanes</mat-label>
+      <input matInput [(ngModel)]="data.lanes">
+    </mat-form-field>
+    <p></p>
+    <div *ngIf="data.type === 'junction'">
+      <mat-form-field appearance="fill">
+        <mat-label>Left</mat-label>
+        <input matInput [(ngModel)]="data.left">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Right</mat-label>
+        <input matInput [(ngModel)]="data.right">
+      </mat-form-field>
+    </div>
+
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-button mat-dialog-close color="warn" class="te-dialog-btn-close">Close</button>

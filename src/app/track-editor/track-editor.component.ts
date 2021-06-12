@@ -1,3 +1,26 @@
+/**
+ *
+ * The MIT License
+
+ Copyright (c) 2010-2021 Google LLC. http://angular.io/license
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+ rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of
+ the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+ */
+
 import {AfterViewInit, Component, Inject, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {SideNavRightService} from '../services/side-nav-right.service';
@@ -41,10 +64,9 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
               public router: Router,
               public serializer: UrlSerializer) {
 
-    //ToDo Replace Cookies with LocalStorage
-    if (cookieService.check('grid_list')) {
-      console.log(JSON.parse(cookieService.get('grid_list')));
-      this.grid_items = JSON.parse(cookieService.get('grid_list'));
+
+    if (localStorage.getItem("dt_grid_list") !== null){
+      this.grid_items = JSON.parse(localStorage.getItem('dt_grid_list'));
       this.id_counter = Math.max.apply(Math, this.grid_items.map(v => {
         return v.item.id;
       })) + 1;
@@ -83,7 +105,6 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    //this.cookieService.set('grid_list', JSON.stringify(this.grid_items));
     localStorage.setItem("dt_grid_list", JSON.stringify(this.grid_items))
     clearInterval(this.interval);
   }
@@ -148,7 +169,6 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
     event.event.stopPropagation();
     this.grid_items.splice(this.grid_items.indexOf(event.item), 1);
   }
-
 
   removeEmptyGrids(rows, cols, grid_list) {
     let removeCounter_x = 0;
@@ -258,22 +278,25 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
-
   openDialogImport() {
     const dialogRef = this.dialog.open(TrackEditorImportContentDialog, {
       panelClass: 'te-import-dialog-custom'
     });
 
+    dialogRef.disableClose = true
+
     //Importing the grid items
     dialogRef.afterClosed().subscribe(_import => {
+      if (_import.value) {
       this.grid_items.splice(0, this.grid_items.length);
-      let imported_grid_items = JSON.parse(_import);
+      let imported_grid_items = JSON.parse(_import.file);
       this.id_counter = Math.max.apply(Math, imported_grid_items.map(v => {
         return v.item.id;
       })) + 1;
       imported_grid_items.forEach(v => {
         this.grid_items.push(v);
       });
+    }
     });
   }
 
@@ -285,6 +308,7 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
       const dialogRef = this.dialog.open(TrackEditorLeaveSiteDialog, {
         panelClass: 'te-leave-site-dialog-custom'
       });
+      dialogRef.disableClose = true
       const resp = await dialogRef.afterClosed().toPromise();
       if (resp) {
         localStorage.setItem('dt_grid_list', JSON.stringify(this.grid_items));
@@ -313,6 +337,7 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 }
 
+
 @Component({
   selector: 'settings-content-dialog',
   templateUrl: 'dialog/te-settings-content-dialog.html',
@@ -332,21 +357,25 @@ export class TrackEditorSettingsContentDialog {
 export class TrackEditorImportContentDialog {
   fileContent = '';
   fileName = '';
+  is_file_valid = false
 
   constructor() {
   }
 
   onFileSelected(event) {
-
     let fileReader = new FileReader();
     const file: File = event.target.files[0];
     this.fileName = file.name;
 
     if (file) {
+      this.is_file_valid = true
       fileReader.onload = ev => {
         this.fileContent = ev.target.result.toString();
       };
       fileReader.readAsText(file);
+    }
+    else {
+      this.is_file_valid = false
     }
   }
 

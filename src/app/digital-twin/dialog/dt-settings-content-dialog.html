@@ -1,25 +1,20 @@
 <h2 mat-dialog-title>Settings</h2>
-<mat-dialog-content class="mat-typography">
+<mat-dialog-content [formGroup]="form" class="mat-typography">
   <p>
-    <mat-form-field appearance="legacy">
+    <mat-form-field appearance="fill">
       <mat-label>Broker Address</mat-label>
-      <input matInput placeholder="Placeholder">
+      <input matInput formControlName="mqtt_setting" placeholder="Placeholder" [(ngModel)]="settings_mqtt_broker">
       <mat-hint>Anki API Broker Address</mat-hint>
+      <mat-error *ngIf="form.get('mqtt_setting').invalid">You must enter a mqtt broker!</mat-error>
     </mat-form-field>
   </p>
   <p>
-    <mat-form-field appearance="legacy">
-      <mat-label>Select</mat-label>
-      <mat-select>
-        <mat-option value="one">First option</mat-option>
-        <mat-option value="two">Second option</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <mat-label>Note: You must reload the page for the change to take place!</mat-label>
   </p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="true">Save</button>
+  <button mat-button [mat-dialog-close]="settings_mqtt_broker" [disabled]="!form.get('mqtt_setting').valid">Save</button>
 </mat-dialog-actions>
 
 

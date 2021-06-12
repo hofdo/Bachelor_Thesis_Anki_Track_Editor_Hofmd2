@@ -17,13 +17,9 @@
   <button mat-button [mat-dialog-close]="{
   value: false
   }">Cancel</button>
-  <button mat-button [mat-dialog-close]="{
+  <button mat-button [disabled]="!is_file_valid" [mat-dialog-close]="{
   file: fileContent,
   value: true
   }">Import</button>
 </mat-dialog-actions>
 
-
-<!-- Copyright 2020 Google LLC. All Rights Reserved.
-    Use of this source code is governed by an MIT-style license that
-    can be found in the LICENSE file at http://angular.io/license -->
