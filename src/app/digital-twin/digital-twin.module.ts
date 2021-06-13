@@ -22,7 +22,12 @@
  */
 
 import { NgModule } from '@angular/core';
-import {DigitalTwinComponent, DigitalTwinImportContentDialog, DigitalTwinSettingsContentDialog} from './digital-twin.component';
+import {
+  DigitalTwinComponent,
+  DigitalTwinImportContentDialog,
+  DigitalTwinLoadingSnackBar,
+  DigitalTwinSettingsContentDialog
+} from './digital-twin.component';
 import {
   DigitalTwinRightSidebarConsole,
   DigitalTwinRightSidebarDialog,
@@ -36,11 +41,12 @@ import {
 import {RouterModule} from '@angular/router';
 import {ExportService} from '../services/export.service';
 import {SharedModule} from '../shared/shared.module';
-import {MatDialogModule} from '@angular/material/dialog';
-import {environment} from '../../environments/environment';
 
+/**
+ * Set the Broker Address for the mqtt configuration
+ */
 let mqtt_broker
-
+//localStorage.setItem("mqtt_broker", "192.168.1.121")
 if (localStorage.getItem("mqtt_broker") !== null){
   mqtt_broker = localStorage.getItem("mqtt_broker")
 }
@@ -48,12 +54,18 @@ else {
   mqtt_broker = 'localhost'
 }
 
+/**
+ * Configuration for the mqtt service
+ */
 export const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
   hostname: mqtt_broker,
   port: 9001,
   path: '/mqtt'
 };
 
+/**
+ * Module for the Digital Twin
+ */
 @NgModule({
   declarations: [
     DigitalTwinComponent,
@@ -62,6 +74,7 @@ export const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
     DigitalTwinRightSidebarDialog,
     DigitalTwinRightSidebarConsole,
     DigitalTwinImportContentDialog,
+    DigitalTwinLoadingSnackBar
   ],
   imports: [
     MqttModule.forRoot(MQTT_SERVICE_OPTIONS),

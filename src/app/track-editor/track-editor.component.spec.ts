@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TrackEditorComponent } from './track-editor.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {HttpClientModule} from '@angular/common/http';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('TrackEditorComponent', () => {
   let component: TrackEditorComponent;
@@ -8,7 +12,8 @@ describe('TrackEditorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TrackEditorComponent ]
+      declarations: [ TrackEditorComponent ],
+      imports: [MatDialogModule, HttpClientModule, MatSnackBarModule, RouterTestingModule]
     })
     .compileComponents();
   });

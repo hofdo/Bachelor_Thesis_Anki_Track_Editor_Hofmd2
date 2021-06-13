@@ -4,8 +4,11 @@
 
 export const environment = {
   production: false,
-  //Default
-  mqtt_broker_address: 'localhost'
+  Rest: {
+    server: "localhost",
+    protocol: "http",
+    port: 8081,
+  }
 };
 
 /*

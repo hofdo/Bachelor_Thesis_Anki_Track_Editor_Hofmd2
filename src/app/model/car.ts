@@ -1,4 +1,6 @@
-
+/**
+ * Model for the connected Cars
+ */
 export class Car {
 
   private _address: string = "";

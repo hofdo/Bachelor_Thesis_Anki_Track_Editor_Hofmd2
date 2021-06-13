@@ -35,8 +35,11 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ExportService} from './services/export.service';
 
-
+/**
+ * Main Module of the application
+ */
 
 @NgModule({
   declarations: [
@@ -58,6 +61,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
   providers: [
     SideNavLeftService,
     SideNavRightService,
+    ExportService
   ]
 })
 export class AppModule {

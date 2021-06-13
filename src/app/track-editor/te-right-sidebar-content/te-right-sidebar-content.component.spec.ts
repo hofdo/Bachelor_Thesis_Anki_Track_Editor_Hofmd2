@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TeRightSidebarContentComponent } from './te-right-sidebar-content.component';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 
 describe('TeRightSidebarContentComponent', () => {
   let component: TeRightSidebarContentComponent;
@@ -8,7 +9,8 @@ describe('TeRightSidebarContentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TeRightSidebarContentComponent ]
+      declarations: [ TeRightSidebarContentComponent ],
+      imports: [MatDialogModule]
     })
     .compileComponents();
   });

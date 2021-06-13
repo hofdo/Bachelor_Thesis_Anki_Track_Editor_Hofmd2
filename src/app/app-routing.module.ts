@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {TrackEditorCanDeactivateGuard} from './track-editor/guard/track-editor-can-deactivate.guard';
 
+/**
+ * Routing Module
+ */
+
+//Routes
 const routes: Routes = [
   {
     path: '',

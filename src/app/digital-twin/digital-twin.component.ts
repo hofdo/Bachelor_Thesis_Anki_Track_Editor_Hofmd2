@@ -36,6 +36,12 @@ import {DtCarListSharingService} from '../services/dt-car-list-sharing.service';
 import {IMqttMessage, MqttService} from 'ngx-mqtt';
 import {environment} from '../../environments/environment';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MatSnackBar} from '@angular/material/snack-bar';
+
+/**
+ * Main Component for the Digital Twin
+ * Here is the logic and the functions used in the digital twin
+ */
 
 @Component({
   selector: 'app-digital-twin',
@@ -51,6 +57,7 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
   Cols: number; //default
   Rows: number; //default
 
+  //Image for canvas
   img: HTMLImageElement = new Image();
   img_car: HTMLImageElement = new Image();
 
@@ -65,18 +72,35 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
   interval;
 
   options: GridsterConfig;
-  public grid_items: { item: GridsterItem, type: string, url: string, id: number }[] = [];
+
+  // List of the current grid-system elementspublic
+  grid_items: { item: GridsterItem, type: string, url: string, id: number }[] = [];
+
+  //List of all the cars that are connected to the mqtt broker
   public cars: Map<string, Car> = new Map<string, Car>();
+  //List of all the ids of the cars
   public car_ids: string[] = [];
   public transmit_data: Map<String, any> = new Map<String, any>();
 
+  //All the Subscriptions for the mqtt broker
   public car_event_subscription: Subscription;
   public car_status_subscription: Subscription;
   public host_event_subscription: Subscription;
   public host_status_subscription: Subscription;
   public message: String;
-  //public topic: string = '/test';
 
+  /**
+   *
+   * @param sidenavServiceRight: Service for the right Sidenav
+   * @param sideNavServiceLeft: Service for the left Sidenav
+   * @param dialog: Dialog Element for the dialog windows
+   * @param exportService: Export service for the communication via a REST-API
+   * @param cookieService: Cookie service for saving data in cookies
+   * @param dataService: Service for sharing data with the sidenav
+   * @param ngZone:
+   * @param _mqttService: Service for the communication with a mqtt broker
+   * @param _loadingSnackbar: Snackbar for showing the loading of the track in the background
+   */
   constructor(public sidenavServiceRight: SideNavRightService,
               public sideNavServiceLeft: SideNavLeftService,
               public dialog: MatDialog,
@@ -84,14 +108,21 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
               public cookieService: CookieService,
               public dataService: DtCarListSharingService,
               public ngZone: NgZone,
-              private _mqttService: MqttService) {
+              private _mqttService: MqttService,
+              private _loadingSnackbar: MatSnackBar) {
 
+    /**
+     * Subscribing on the topics from which we want to receive data from the mqtt broker
+     */
     this.car_event_subscription = this._mqttService.observe('Anki/Car/+/E/Messages/#').subscribe((message: IMqttMessage) => this.handleMsg(message));
     this.car_status_subscription = this._mqttService.observe('Anki/Car/+/S/Information').subscribe((message: IMqttMessage) => this.handleMsg(message));
     this.host_event_subscription = this._mqttService.observe('Anki/Host/+/E/#').subscribe((message: IMqttMessage) => this.handleMsg(message));
     this.host_status_subscription = this._mqttService.observe('Anki/Host/+/S/#').subscribe((message: IMqttMessage) => this.handleMsg(message));
   }
 
+  /**
+   * Clear intervals, animationsframes and the subscriptions to the mqtt broker
+   */
   ngOnDestroy() {
     clearInterval(this.interval);
     this.car_event_subscription.unsubscribe();
@@ -101,23 +132,37 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
     cancelAnimationFrame(this.requestId);
   }
 
+  /**
+   * Here the Sidenav elements are passed to the services
+   */
   ngAfterViewInit() {
     this.sidenavServiceRight.setSidenav(this.sidenav_right);
     this.sideNavServiceLeft.setSidenav(this.sidenav_left);
   }
 
   ngOnInit(): void {
-
+    /**
+     * Getting the amount of rows and columns in the grid-system
+     */
     if (this.cookieService.check('grid_options')) {
       let json = JSON.parse(this.cookieService.get('grid_options'));
       this.Rows = json.rows;
       this.Cols = json.cols;
     }
 
+    /**
+     * Getting the current list of grid-elements in the grid-system and getting a picture of the whole trac
+     */
     if (localStorage.getItem('dt_grid_list') !== null) {
       this.grid_items = JSON.parse(localStorage.getItem('dt_grid_list'));
+      let snackBarRef = this._loadingSnackbar.openFromComponent(DigitalTwinLoadingSnackBar, {
+        panelClass: "dt-snackbar-loading",
+        verticalPosition: 'bottom',
+        horizontalPosition: 'start'
+      })
       this.exportService.exportSingle(this.grid_items, this.Rows, this.Cols, 'png').subscribe(data => {
         this.img.src = URL.createObjectURL(data);
+        snackBarRef.dismiss()
       });
     }
     //Draw Background to scale with canvas
@@ -125,6 +170,10 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
 
     this.ctx.strokeStyle = 'green';
     this.ctx.lineWidth = 4;
+
+    /**
+     * Calculate the scale of the track based on the amount of columns and rows
+     */
 
     // noinspection JSSuspiciousNameCombination
     this.canvas.nativeElement.width = this.canvas.nativeElement.offsetHeight;
@@ -137,40 +186,48 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
         this.imgHeight = this.canvas.nativeElement.height;
         this.imgWidth = this.imgHeight * wrh;
       }
+      //Drawing the track as a background on the canvas
       this.ctx.drawImage(this.img, 0, 0, this.imgWidth, this.imgHeight);
 
       this.colImgWidth = this.imgWidth / this.Rows;
       this.colImgHeight = this.imgHeight / this.Cols;
 
+      //Getting the image of the car that will be displayed on the canvas
       this.img_car.src = 'https://i.ebayimg.com/images/g/NYEAAOSw061fm-A~/s-l640.jpg';
 
+      /**
+       * Set an interval for the function that will animate the cars on the canvas
+       */
       this.ngZone.runOutsideAngular(() => this.tick());
       this.interval = setInterval(() => {
         this.tick();
       }, 100);
-
-      console.log('cols: ' + this.Cols);
-      console.log('rows: ' + this.Rows);
-      console.log('ratio: ' + wrh);
-      console.log('old width: ' + this.img.height);
-      console.log('new width: ' + this.imgWidth);
-      console.log('old height: ' + this.img.height);
-      console.log('new height: ' + this.imgHeight);
-      console.log('Col width: ' + this.colImgWidth);
-      console.log('Col height: ' + this.colImgHeight);
     };
   }
 
+  /**
+   * Function that the loads the image of the track
+   */
   loadImage() {
     return this.exportService.exportSingle(this.grid_items, this.Rows, this.Cols, 'png').toPromise().then(data => {
       this.img.src = URL.createObjectURL(data);
     });
   }
 
+  /**
+   * This function draws the elements on the canvas and is called in a fixed interval
+   * There for the elements are animated based in the interval
+   * @private
+   */
   private tick() {
+    //Clearing the canvas to begin drawing the new position of the elements
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    //When the amount of grid-elements is greater zero the track is drawn
     if (this.grid_items.length > 0) {
       this.ctx.drawImage(this.img, 0, 0, this.imgWidth, this.imgHeight);
+      /**
+       * When the amount of cars is greater than 0 then every car is drawn on the corresponding track
+       */
       if (this.cars.size > 0) {
         this.cars.forEach(car => {
           let grid = this.grid_items.find(grid => {
@@ -179,8 +236,6 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
           if (grid !== undefined){
             this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
           }
-          console.log(this.cars.get("f4c22c6c0382").lastTrackPieceID)
-          console.log(this.grid_items)
           /*
           if (grid !== undefined) {
             let location_id_mod = car.currentTrackPieceID%3
@@ -253,24 +308,27 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
         });
       }
     }
-
     this.requestId = requestAnimationFrame(() => this.tick);
   }
 
+  /**
+   * This function handles the incoming messages from the mqtt broker
+   * @param msg: The incoming message from the mqtt broker
+   * @private
+   */
   private handleMsg(msg) {
 
+    //The name of the subscribed topic
     let topic = msg.topic;
+    //The payload from the mqtt broker
     let payload = JSON.parse(msg.payload.toString());
 
-    //console.log("Topic: " + topic + ", eventID: " + payload)
-
+    //This Regex matches the topics with the format Anki/Car/+/E/Messages
     if (RegExp('Anki[\/]Car[\/].*[\/]E[\/]Messages[\/].*').test(topic)) {
       let carID = topic.split('/')[2];
       let eventID = topic.split('/')[5];
+      //This switch matches the different events that come from the Anki Overdrive Controller via the mqtt broker
       switch (eventID) {
-        case 'ANKI_VEHICLE_MSG_V2C_PING_RESPONSE':
-          //TODO TBD
-          break;
         case 'ANKI_VEHICLE_MSG_V2C_VERSION_RESPONSE':
           if (this.cars.has(carID)) {
             this.cars.get(carID).version = payload['value'];
@@ -322,6 +380,7 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
           }
           break;
       }
+      //This Regex matches the topics with the format Anki/Host/+/S/Cars
     } else if (RegExp('Anki[\/]Host[\/].*[\/]S[\/]Cars').test(topic)) {
       if (payload.length !== undefined) {
         payload.forEach(val => {
@@ -329,13 +388,16 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
           this.addDisplayCar(val);
         });
       }
+      //This Regex matches the topics with the format Anki/Host/+/E/CarConnected
     } else if (RegExp('Anki[\/]Host[\/].*[\/]E[\/]CarConnected').test(topic)) {
       let carID = payload['Car'];
       this.addCar(carID);
       this.addDisplayCar(carID);
+      //This Regex matches the topics with the format Anki/Host/+/E/CarDisconnected
     } else if (RegExp('Anki[\/]Host[\/].*[\/]E[\/]CarDisconnected').test(topic)) {
       let carID = payload['Car'];
       this.removeCar(carID);
+      //This Regex matches the topics with the format Anki/Car/+/S/Information
     } else if (RegExp('Anki[\/]Car[\/].*[\/]S[\/]Information').test(topic)) {
       let carID = topic.split('/')[2];
       this.addCar(carID);
@@ -346,13 +408,19 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
         this.cars.get(carID).productId = payload['productId'];
       }
     }
-
+    //Setting the data for the sideNav
     this.transmit_data.set('car_list', this.cars);
     this.transmit_data.set('car_ids', this.car_ids);
+
+    //Pass the data to the service which tells the sideNav Component that the data changed based on the incoming events
     this.dataService.changeMessage(this.transmit_data);
 
   }
 
+  /**
+   * This function adds a connected car to the list of cars that will be displayed on the track
+   * @param car_id: The ID of the car that is connected
+   */
   addCar(car_id) {
     if (!(this.cars.has(car_id))) {
       let car = new Car();
@@ -362,6 +430,10 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  /**
+   * This function adds a car to be displayed in the sidenav
+   * @param car_id: The ID of the car that is connected
+   */
   addDisplayCar(car_id) {
     if (!(this.car_ids.some(car => {
       return car === car_id;
@@ -370,6 +442,10 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Removes a car form the list of cars that will be displayed on the track
+   * @param car_id: The ID of the car that is connected
+   */
   removeCar(car_id) {
     this.cars.delete(car_id);
     this.car_ids.forEach(((value, index) => {
@@ -379,6 +455,10 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
     }));
   }
 
+  /**
+   * This functions publishes the commands to the mqtt broker that should change the behaviour of the real cars
+   * @param data: The commands that will be published to the mqtt broker
+   */
   sendMQTTConsoleMsg(data) {
     let speed = data.speed;
     let accel = data.acceleration;
@@ -398,6 +478,9 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  /**
+   * This functions opens the dialog for the Setting Dialog Window
+   */
   openDialog() {
     const dialogRef = this.dialog.open(DigitalTwinSettingsContentDialog);
 
@@ -405,7 +488,9 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
         localStorage.setItem("mqtt_broker", result)
     });
   }
-
+  /**
+   * This functions opens the dialog for the Import Dialog Window
+   */
   openDialogImport() {
     const dialogRef = this.dialog.open(DigitalTwinImportContentDialog, {
       panelClass: 'dt-import-dialog-custom'
@@ -426,6 +511,9 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 }
 
+/**
+ * Component for the Setting Dialog Window
+ */
 // @ts-ignore
 @Component({
   selector: 'dt-settings-content-dialog',
@@ -445,6 +533,9 @@ export class DigitalTwinSettingsContentDialog implements OnInit{
   }
 }
 
+/**
+ * Component for the Import Dialog Window
+ */
 // @ts-ignore
 @Component({
   selector: 'dt-import-content-dialog',
@@ -474,5 +565,16 @@ export class DigitalTwinImportContentDialog {
       this.is_file_valid = false
     }
   }
+
+}
+
+/**
+ * Component for the Loading Snackbar
+ */
+@Component({
+  selector: 'dt-loading-snackbar',
+  templateUrl: 'dialog/dt-loading-snackbar.html',
+})
+export class DigitalTwinLoadingSnackBar {
 
 }

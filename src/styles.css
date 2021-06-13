@@ -47,6 +47,21 @@
   height: auto;
 }
 
+.dt-snackbar-loading {
+  padding: 10px;
+}
+
+dt-loading-snackbar mat-progress-bar {
+  margin-bottom: 10px;
+}
+
+.te-snackbar-loading {
+  padding: 10px;
+}
+
+te-loading-snackbar mat-progress-bar {
+  margin-bottom: 10px;
+}
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

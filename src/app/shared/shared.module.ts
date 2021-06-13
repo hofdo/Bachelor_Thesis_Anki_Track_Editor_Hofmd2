@@ -16,8 +16,11 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {MaterialCardElevationDirective} from './material-card-elevation.directive';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
-
+/**
+ * In this module the Modules that are shared with a multitude of other modules are imported
+ */
 
 @NgModule({
   declarations: [
@@ -61,6 +64,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatBottomSheetModule,
     GridsterModule,
     MatDialogModule,
+    MatProgressBarModule
   ]
 })
 export class SharedModule { }

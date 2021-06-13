@@ -29,13 +29,14 @@ import {
   TrackEditorExportContentDialog,
   TrackEditorImportContentDialog,
   TrackEditorLeaveSiteDialog,
-  TrackEditorSettingsContentDialog
+  TrackEditorSettingsContentDialog, TrackEditorSnackBar
 } from './track-editor.component';
 import {TrackEditorGridsterItemContentComponent} from './track-editor-gridster-item-content/track-editor-gridster-item-content.component';
 import {TeRightSidebarContentComponent, TrackEditorRightSidebarDialog} from './te-right-sidebar-content/te-right-sidebar-content.component';
 import {RouterModule} from '@angular/router';
 import {SharedModule} from '../shared/shared.module';
 import {TrackEditorCanDeactivateGuard} from './guard/track-editor-can-deactivate.guard';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import {TrackEditorCanDeactivateGuard} from './guard/track-editor-can-deactivate
     TrackEditorImportContentDialog,
     TrackEditorGridsterItemContentComponent,
     TrackEditorLeaveSiteDialog,
+    TrackEditorSnackBar
   ],
   imports: [
     SharedModule,
@@ -56,7 +58,7 @@ import {TrackEditorCanDeactivateGuard} from './guard/track-editor-can-deactivate
         component: TrackEditorComponent,
         canDeactivate: [TrackEditorCanDeactivateGuard]
       }
-    ])
+    ]),
   ],
   providers: [TrackEditorCanDeactivateGuard]
 })

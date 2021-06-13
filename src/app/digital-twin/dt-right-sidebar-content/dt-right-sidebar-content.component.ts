@@ -6,6 +6,9 @@ import {Car} from '../../model/car';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {DtCarListSharingService} from '../../services/dt-car-list-sharing.service';
 
+/**
+ * This is the component for the content of the right sidebar in the digital twin
+ */
 @Component({
   selector: 'app-dt-right-sidebar-content',
   templateUrl: './dt-right-sidebar-content.component.html',
@@ -13,13 +16,23 @@ import {DtCarListSharingService} from '../../services/dt-car-list-sharing.servic
 })
 export class DtRightSidebarContentComponent implements OnInit, OnDestroy {
 
+  //Eventemitter to the parent component
   @Output() console_mqtt_msg: EventEmitter<any> = new EventEmitter<any>()
 
   cars: Map<string, Car>;
   car_ids: String[] = [];
+  //Subscription for the data exchange between the Digital Twin an this component
   subscription: Subscription;
+  //BehaviourSubject for the data exchange between the Digital Twin an this component
   observable = new BehaviorSubject<String[]>([]);
 
+  /**
+   *
+   * @param dialog: Dialog element
+   * @param _snackBar: Snackbar element
+   * @param _bottomSheet: Bottomsheet element for the console
+   * @param dataService: Service for the data exchange between the Digital Twin and the
+   */
   constructor(
     public dialog: MatDialog,
     public _snackBar: MatSnackBar,
@@ -30,6 +43,9 @@ export class DtRightSidebarContentComponent implements OnInit, OnDestroy {
 
   defaultElevation = 2;
 
+  /**
+   * Subscribe to the data service for the list of cars and car_ids from the digital twin
+   */
   ngOnInit(): void {
     this.subscription = this.dataService.currentMessage.subscribe(message => {
       if (message !== null) {
@@ -40,10 +56,17 @@ export class DtRightSidebarContentComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Unsubscribe from the data service
+   */
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 
+  /**
+   * This function opens the bottomsheet element for the console
+   * @param car_id: ID of the connected car
+   */
   openBottomSheet(car_id): void {
     this._bottomSheet.open(DigitalTwinRightSidebarConsole, {
       panelClass: 'dt-bottom-sheet-console',
@@ -53,12 +76,21 @@ export class DtRightSidebarContentComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * This functions opens a snackbar element
+   * @param message: The message that should be shown
+   * @param action: The action that should be passed on to the snackbar
+   */
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 2000,
     });
   }
 
+  /**
+   * This function opens a dialog element with detailed information about the connected car
+   * @param car: Which car should be shown
+   */
   openDialog(car) {
     const dialogRef = this.dialog.open(DigitalTwinRightSidebarDialog, {
       width: '30%',
@@ -74,6 +106,9 @@ export class DtRightSidebarContentComponent implements OnInit, OnDestroy {
 
 }
 
+/**
+ * The Component for the Car Detail Dialog
+ */
 @Component({
   selector: 'dt-right-sidebar-content-dialog',
   templateUrl: '../dialog/dt-right-sidebar-dialog.html',
@@ -84,6 +119,9 @@ export class DigitalTwinRightSidebarDialog {
   }
 }
 
+/**
+ * The Component for the Console BottomSheet
+ */
 @Component({
   selector: 'dt-right-sidebar-console',
   templateUrl: 'dt-right-sidebar-console.html',
