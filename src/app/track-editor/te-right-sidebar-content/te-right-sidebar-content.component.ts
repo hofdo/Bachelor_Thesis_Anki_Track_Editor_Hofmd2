@@ -1,6 +1,7 @@
 import {Component, Inject, Output} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import { EventEmitter } from '@angular/core';
+import {environment} from '../../../environments/environment';
 
 /**
  * This is the component for the content of the right sidebar of the Track Editor
@@ -25,10 +26,10 @@ export class TeRightSidebarContentComponent {
   defaultElevation = 2;
   //List of all the track pieces with the necessary information to display them
   items: {type: string, iconURL: string, iconName: String, track_id: string, lanes: string, left: string, right: string}[] = [
-    {"type": "straight", "iconURL": "http://localhost:8081/image?type=straight&lanes=16&track_id=0", iconName: "Straight Track Piece", track_id: "0", lanes: "0", left: "0", right: "0"},
-    {"type": "curve", "iconURL": "http://localhost:8081/image?type=curve&lanes=16&track_id=0", iconName: "Curve Track Piece", track_id: "0", lanes: "0", left: "0", right: "0"},
-    {"type": "intersection", "iconURL": "http://localhost:8081/image?type=intersection&lanes=16", iconName: "Intersection Track Piece", track_id: "0", lanes: "0", left: "0", right: "0"},
-    {"type": "junction", "iconURL": "http://localhost:8081/image?type=junction&lanes=16&track_id=0&left=8&right=8", iconName: "Junction Track Piece", track_id: "0", lanes: "0", left: "0", right: "0"}
+    {"type": "straight", "iconURL": "http://"+environment.Rest.server+":"+environment.Rest.port.toString()+"/image?type=straight&lanes=16&track_id=0", iconName: "Straight Track Piece", track_id: "0", lanes: "0", left: "0", right: "0"},
+    {"type": "curve", "iconURL": "http://"+environment.Rest.server+":"+environment.Rest.port.toString()+"/image?type=curve&lanes=16&track_id=0", iconName: "Curve Track Piece", track_id: "0", lanes: "0", left: "0", right: "0"},
+    {"type": "intersection", "iconURL": "http://"+environment.Rest.server+":"+environment.Rest.port.toString()+"/image?type=intersection&lanes=16", iconName: "Intersection Track Piece", track_id: "0", lanes: "0", left: "0", right: "0"},
+    {"type": "junction", "iconURL": "http://"+environment.Rest.server+":"+environment.Rest.port.toString()+"/image?type=junction&lanes=16&track_id=0&left=8&right=8", iconName: "Junction Track Piece", track_id: "0", lanes: "0", left: "0", right: "0"}
     ];
 
   /**

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {FileSaverService} from 'ngx-filesaver';
+import {environment} from '../../environments/environment';
 
 /**
  * This service handles all the export requests and communication with the REST-API
@@ -26,7 +27,7 @@ export class ExportService {
    * @param track_id: What Track ID the track piece should have
    */
   exportEach(type, lanes, track_id){
-    return this.httpClient.get("http://localhost:8081/image", {
+    return this.httpClient.get("http://"+environment.Rest.server+":"+environment.Rest.port.toString()+"/image", {
       'responseType': 'blob',
       'params': new HttpParams().set("type", type)
         .set("lanes", lanes)
@@ -42,7 +43,7 @@ export class ExportService {
    * @param type: Which format the picture should have
    */
   exportSingle(list, rows, cols, type){
-      return  this.httpClient.post("http://localhost:8081/export", list,{
+      return  this.httpClient.post("http://"+environment.Rest.server+":"+environment.Rest.port.toString()+"/export", list,{
       'responseType': 'blob',
       'params': new HttpParams()
         .set("maxRows", rows)

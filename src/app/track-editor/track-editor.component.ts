@@ -176,7 +176,7 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
         item = {x: 0, y: 0, cols: 1, rows: 1, id: this.id_counter, degree: 0, lanes: event.lanes, track_id: event.track_id}
         break;
     }
-    let url = 'http://' + environment.Rest.server +':' + environment.Rest.protocol +'/image?' + param.toString();
+    let url = 'http://'+ environment.Rest.server +':' + environment.Rest.port.toString() + '/image?' + param.toString();
     this.grid_items.push({
       'item': item,
       'type': event.type,
