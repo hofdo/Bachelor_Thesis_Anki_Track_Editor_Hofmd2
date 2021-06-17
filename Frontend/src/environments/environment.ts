@@ -4,7 +4,12 @@
 
 export const environment = {
   production: false,
+  MQTT: {
+    username: "admin",
+    password: "32-5#v3a1yoa9ekaI`<w+%;"
+  },
   Rest: {
+    //server: "185.143.45.71",
     server: "localhost",
     protocol: "http",
     port: 8081,

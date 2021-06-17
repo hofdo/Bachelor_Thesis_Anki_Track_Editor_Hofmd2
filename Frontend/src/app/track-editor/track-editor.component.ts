@@ -57,7 +57,7 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
   exportImageFormat;
   interval;
   public grid_items: { item: GridsterItem, type: string, url: string, id: number }[] = [];
-  id_counter: number;
+  id_counter: number = 1;
 
   /**
    *
@@ -173,7 +173,7 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
           .set("track_id", event.track_id)
           .set("left", event.left)
           .set("right", event.right);
-        item = {x: 0, y: 0, cols: 1, rows: 1, id: this.id_counter, degree: 0, lanes: event.lanes, track_id: event.track_id}
+        item = {x: 0, y: 0, cols: 1, rows: 1, id: this.id_counter, degree: 0, lanes: event.lanes, track_id: event.track_id, left: event.left, right: event.right}
         break;
     }
     let url = 'http://'+ environment.Rest.server +':' + environment.Rest.port.toString() + '/image?' + param.toString();
@@ -196,6 +196,8 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
     this.grid_items.map(value => {
       if (value.id === id) {
         value.item.degree = state;
+        console.log(state)
+        console.log(value.item.degree)
       }
     });
 
@@ -301,7 +303,7 @@ export class TrackEditorComponent implements AfterViewInit, OnInit, OnDestroy {
                 verticalPosition: 'bottom',
                 horizontalPosition: 'start'
               })
-              this.exportService.exportEach(value.type, value.item.lanes, value.item.track_id).subscribe(data => {
+              this.exportService.exportEach(value.type, value.item.lanes, value.item.track_id, value.item.left, value.item.right).subscribe(data => {
                 this.fileSaverService.save(data, value.type + '.' + fileFormat);
                 snackbarRef.dismiss()
               });

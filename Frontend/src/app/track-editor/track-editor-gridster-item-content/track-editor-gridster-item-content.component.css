@@ -35,3 +35,7 @@ div:hover .gridster-item-img-overlay mat-card .gridster-item-img-overlay-button{
 .fill-space {
   flex: 1 1 auto;
 }
+
+mat-card mat-card-actions mat-card-subtitle {
+  color: #E91E63;
+}

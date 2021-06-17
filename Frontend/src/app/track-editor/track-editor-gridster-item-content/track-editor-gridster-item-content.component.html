@@ -1,18 +1,22 @@
 <div>
 <div class="gridster-item-img-overlay">
   <mat-card class="mat-elevation-z0">
-    <mat-card-actions align="end">
+    <mat-card-actions align="end" class="h-75">
       <button mat-icon-button class="gridster-item-img-overlay-button" (click)="rotate()">
         <mat-icon color="accent">
           rotate_right
         </mat-icon>
       </button>
       <span class="fill-space"></span>
-      {{grid_item.id}}
       <button mat-icon-button color="accent" (mousedown)="removeItem($event, grid_item)"
               (touchstart)="removeItem($event, grid_item)">
         <mat-icon>delete</mat-icon>
       </button>
+    </mat-card-actions>
+    <mat-card-actions align="end">
+      <mat-card-subtitle>Track ID: {{grid_item.item.track_id}}</mat-card-subtitle>
+      <span class="fill-space"></span>
+      <mat-card-subtitle>Lanes: {{grid_item.item.lanes}}</mat-card-subtitle>
     </mat-card-actions>
   </mat-card>
 </div>

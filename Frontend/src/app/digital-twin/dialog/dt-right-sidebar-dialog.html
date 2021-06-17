@@ -4,77 +4,115 @@
     <h2 mat-dialog-title>{{data.cars.get(data.car).identifier}}</h2>
     <mat-list>
       <mat-list-item>
-        <mat-label>Name</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).identifier" readonly>
+        <div>
+        <mat-label class="w-auto" >Name: </mat-label>
+        <input matInput placeholder="0" [value]="data.cars.get(data.car).identifier" class="w-auto" readonly>
+        </div>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>Model</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).model" readonly>
+        <div>
+        <mat-label class="w-auto">Model: </mat-label>
+        <input matInput placeholder="0" [value]="data.cars.get(data.car).model" class="w-auto" readonly>
+        </div>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>Model ID</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).modelId" readonly>
+        <div>
+        <mat-label class="w-auto" >Model ID: </mat-label>
+        <input matInput class="w-auto" placeholder="0" [value]="data.cars.get(data.car).modelId" readonly>
+        </div>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>Product ID</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).productId" readonly>
+        <div>
+        <mat-label class="w-auto" >Product ID: </mat-label>
+        <input matInput class="w-auto" placeholder="0" [value]="data.cars.get(data.car).productId" readonly>
+        </div>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>Version</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).version" readonly>
+        <div>
+        <mat-label class="w-auto" >Version: </mat-label>
+        <input matInput class="w-auto" placeholder="0" [value]="data.cars.get(data.car).version" readonly>
+        </div>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>Battery Level</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).batteryLevel" readonly>
+        <div>
+        <mat-label class="w-auto">Battery Level: </mat-label>
+        <input matInput class="w-auto" placeholder="0" [value]="data.cars.get(data.car).batteryLevel" readonly>
+        </div>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>Speed</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).speed" readonly>
+        <div>
+        <mat-label class="w-auto" >Speed: </mat-label>
+        <input matInput class="w-auto" placeholder="0" [value]="data.cars.get(data.car).speed" readonly>
+        </div>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>Lane</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).offset" readonly>
+        <div>
+        <mat-label class="w-auto" >Lane: </mat-label>
+        <input matInput class="w-auto" placeholder="0" [value]="data.cars.get(data.car).offset" readonly>
+        </div>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>Track Piece ID</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).lastTrackPieceID.toString()" readonly>
+        <div>
+        <mat-label class="w-auto" >Track Piece ID: </mat-label>
+        <input matInput class="w-auto" placeholder="0" [value]="data.cars.get(data.car).lastTrackPieceID.toString()" readonly>
+        </div>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>Track Location ID</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).lastTrackPositionID.toString()" readonly>
+        <div>
+        <mat-label class="w-auto" >Track Location ID: </mat-label>
+        <input matInput class="w-auto" placeholder="0" [value]="data.cars.get(data.car).lastTrackPositionID.toString()" readonly>
+        </div>
       </mat-list-item>
+      <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>Is Exiting</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).isExiting.toString()" readonly>
+        <div>
+        <mat-label class="w-auto" >Is Exiting: </mat-label>
+        <input matInput class="w-auto" placeholder="0" [value]="data.cars.get(data.car).isExiting.toString()" readonly>
+        </div>
       </mat-list-item>
+      <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>leftWheelDistance</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).leftWheelDistance.toString()" readonly>
+        <div>
+        <mat-label class="w-auto" >leftWheelDistance: </mat-label>
+        <input matInput class="w-auto" placeholder="0" [value]="data.cars.get(data.car).leftWheelDistance.toString()" readonly>
+        </div>
       </mat-list-item>
+      <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>rightWheelDistance</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).rightWheelDistance.toString()" readonly>
+        <div>
+        <mat-label class="w-auto" >rightWheelDistance: </mat-label>
+        <input matInput class="w-auto" placeholder="0" [value]="data.cars.get(data.car).rightWheelDistance.toString()" readonly>
+        </div>
       </mat-list-item>
+      <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>Is on Track</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).isOnTrack.toString()" readonly>
+        <div>
+        <mat-label class="w-auto" >Is on Track: </mat-label>
+        <input matInput class="w-auto" placeholder="0" [value]="data.cars.get(data.car).isOnTrack.toString()" readonly>
+        </div>
       </mat-list-item>
+      <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>Is Charging</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).isCharging.toString()" readonly>
+        <div>
+        <mat-label class="w-auto" >Is Charging: </mat-label>
+        <input matInput class="w-auto" placeholder="0" [value]="data.cars.get(data.car).isCharging.toString()" readonly>
+        </div>
       </mat-list-item>
+      <mat-divider></mat-divider>
       <mat-list-item>
-        <mat-label>Is Delocalized</mat-label>
-        <input matInput placeholder="0" [value]="data.cars.get(data.car).isDelocalized.toString()" readonly>
+        <div>
+        <mat-label class="w-auto" >Is Delocalized: </mat-label>
+        <input matInput class="w-auto" placeholder="0" [value]="data.cars.get(data.car).isDelocalized.toString()" readonly>
+        </div>
       </mat-list-item>
     </mat-list>
   <mat-dialog-actions>

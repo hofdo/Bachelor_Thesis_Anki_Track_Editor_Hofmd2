@@ -156,13 +156,13 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
     if (localStorage.getItem('dt_grid_list') !== null) {
       this.grid_items = JSON.parse(localStorage.getItem('dt_grid_list'));
       let snackBarRef = this._loadingSnackbar.openFromComponent(DigitalTwinLoadingSnackBar, {
-        panelClass: "dt-snackbar-loading",
+        panelClass: 'dt-snackbar-loading',
         verticalPosition: 'bottom',
         horizontalPosition: 'start'
-      })
+      });
       this.exportService.exportSingle(this.grid_items, this.Rows, this.Cols, 'png').subscribe(data => {
         this.img.src = URL.createObjectURL(data);
-        snackBarRef.dismiss()
+        snackBarRef.dismiss();
       });
     }
     //Draw Background to scale with canvas
@@ -189,11 +189,13 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
       //Drawing the track as a background on the canvas
       this.ctx.drawImage(this.img, 0, 0, this.imgWidth, this.imgHeight);
 
+
       this.colImgWidth = this.imgWidth / this.Rows;
       this.colImgHeight = this.imgHeight / this.Cols;
 
       //Getting the image of the car that will be displayed on the canvas
-      this.img_car.src = 'https://i.ebayimg.com/images/g/NYEAAOSw061fm-A~/s-l640.jpg';
+      //URL: http://www.clker.com/clipart-green-car-top-view-1.html
+      this.img_car.src = "/assets/directory/green-car-top-view-md.png";
 
       /**
        * Set an interval for the function that will animate the cars on the canvas
@@ -233,78 +235,145 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
           let grid = this.grid_items.find(grid => {
             return grid.item.track_id == car.currentTrackPieceID;
           });
-          if (grid !== undefined){
-            this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
-          }
-          /*
           if (grid !== undefined) {
-            let location_id_mod = car.currentTrackPieceID%3
-            this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
-            switch (grid.type){
-              case "straight":
-                if (car.lastTrackPieceID !== 0){
-                  if (car.currentTrackPieceID === 39){
-                    if (car.currentTrackPieceID !== car.lastTrackPieceID){
-                      car.isReverse = car.currentTrackPieceID % 2 === 1;
-                    }
-                  }
-                  else {
-                    if (car.currentTrackPieceID !== car.lastTrackPieceID){
-                      car.isReverse = car.currentTrackPieceID % 3 === 2;
-                    }
-                  }
-                }
-                console.log(car.isReverse)
+            let location_id_mod = car.lastTrackPositionID % 3;
+            switch (grid.type) {
+              case 'straight':
                 switch (grid.item.degree) {
-                  case "0":
-                    //this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
-                    if (car.currentTrackPieceID === 39){
-
+                  case '0':
+                    switch (location_id_mod) {
+                      case 0:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 4), 50, 50);
+                        break
+                      case 1:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
+                        break
+                      case 2:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + ((this.colImgHeight / 2)+(this.colImgHeight / 4)), 50, 50);
+                        break
                     }
-                    break
-                  case "90":
-
-                    if (car.currentTrackPieceID === 39){
-
+                    break;
+                  case '90':
+                    switch (location_id_mod) {
+                      case 0:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 4), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
+                        break
+                      case 1:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
+                        break
+                      case 2:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + ((this.colImgHeight / 2)+(this.colImgHeight / 4)), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
+                        break
                     }
-                    break
-                  case "180":
-
-                    if (car.currentTrackPieceID === 39){
-
+                    break;
+                  case '180':
+                    switch (location_id_mod) {
+                      case 0:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + ((this.colImgHeight / 2)+(this.colImgHeight / 4)), 50, 50);
+                        break
+                      case 1:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
+                        break
+                      case 2:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 4), 50, 50);
+                        break
                     }
-                    break
-                  case "270":
-
-                    if (car.currentTrackPieceID === 39){
-
+                    break;
+                  case '270':
+                    switch (location_id_mod) {
+                      case 0:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + ((this.colImgHeight / 2)+(this.colImgHeight / 4)), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
+                        break
+                      case 1:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
+                        break
+                      case 2:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 4), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
+                        break
                     }
-                    break
+                    break;
                 }
-                break
-              case "curve":
+                break;
+              case 'curve':
+                let sec_3_pos_id
+                let lanes = grid.item.lanes
+                if (lanes%2){
+                  sec_3_pos_id = lanes-1
+                }
+                else {
+                  sec_3_pos_id = lanes-2
+                }
+                if (car.lastTrackPositionID < sec_3_pos_id){
+                  location_id_mod = car.lastTrackPositionID % 2;
+                }
+                else {
+                  location_id_mod = (car.lastTrackPositionID-sec_3_pos_id) % 3;
+                }
+                console.log(grid.item.degree)
                 switch (grid.item.degree) {
+                  case 0:
                   case "0":
-
-                    break
-                  case "90":
-
-                    break
-                  case "180":
-
-                    break
-                  case "270":
-
-                    break
+                    switch (location_id_mod) {
+                      case 0:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight * 0.233), (grid.item.y) * this.colImgHeight + (this.colImgHeight * 0.535), 50, 50);
+                        break
+                      case 1:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight * 0.393), (grid.item.y) * this.colImgHeight + (this.colImgHeight * 0.688), 50, 50);
+                        break
+                      case 2:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight * 0.507), (grid.item.y) * this.colImgHeight + (this.colImgHeight * 0.886), 50, 50);
+                        break
+                    }
+                    break;
+                  case '90':
+                    switch (location_id_mod) {
+                      case 0:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight * 0.490), (grid.item.y) * this.colImgHeight + (this.colImgHeight * 0.1789), 50, 50);
+                        break
+                      case 1:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight * 0.352), (grid.item.y) * this.colImgHeight + (this.colImgHeight * 0.353), 50, 50);
+                        break
+                      case 2:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight * 0.131), (grid.item.y) * this.colImgHeight + (this.colImgHeight * 0.506), 50, 50);
+                        break
+                    }
+                    break;
+                  case '180':
+                    switch (location_id_mod) {
+                      case 0:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight * 0.86), (grid.item.y) * this.colImgHeight + (this.colImgHeight * 0.476), 50, 50);
+                        break
+                      case 1:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight * 0.623), (grid.item.y) * this.colImgHeight + (this.colImgHeight * 0.299), 50, 50);
+                        break
+                      case 2:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight * 0.5349), (grid.item.y) * this.colImgHeight + (this.colImgHeight * 0.1323), 50, 50);
+                        break
+                    }
+                    break;
+                  case '270':
+                    switch (location_id_mod) {
+                      case 0:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight * 0.5128), (grid.item.y) * this.colImgHeight + (this.colImgHeight * 0.905), 50, 50);
+                        break
+                      case 1:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight * 0.626), (grid.item.y) * this.colImgHeight + (this.colImgHeight * 0.7014), 50, 50);
+                        break
+                      case 2:
+                        this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight * 0.835), (grid.item.y) * this.colImgHeight + (this.colImgHeight * 0.5432), 50, 50);
+                        break
+                    }
+                    break;
                 }
-                break
-              case "intersection":
-
-                break
+                break;
+              case 'intersection':
+                this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
+                break;
+              case 'junction':
+                this.ctx.drawImage(this.img_car, grid.item.x * this.colImgHeight + (this.colImgHeight / 2), (grid.item.y) * this.colImgHeight + (this.colImgHeight / 2), 50, 50);
+                break;
             }
           }
-
-           */
         });
       }
     }
@@ -485,9 +554,10 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
     const dialogRef = this.dialog.open(DigitalTwinSettingsContentDialog);
 
     dialogRef.afterClosed().subscribe(result => {
-        localStorage.setItem("mqtt_broker", result)
+      localStorage.setItem('mqtt_broker', result);
     });
   }
+
   /**
    * This functions opens the dialog for the Import Dialog Window
    */
@@ -519,7 +589,7 @@ export class DigitalTwinComponent implements AfterViewInit, OnInit, OnDestroy {
   selector: 'dt-settings-content-dialog',
   templateUrl: 'dialog/dt-settings-content-dialog.html',
 })
-export class DigitalTwinSettingsContentDialog implements OnInit{
+export class DigitalTwinSettingsContentDialog implements OnInit {
   settings_mqtt_broker;
   form: FormGroup;
 
@@ -544,7 +614,8 @@ export class DigitalTwinSettingsContentDialog implements OnInit{
 export class DigitalTwinImportContentDialog {
   fileContent = '';
   fileName = '';
-  is_file_valid = false
+  is_file_valid = false;
+
   constructor() {
   }
 
@@ -555,14 +626,13 @@ export class DigitalTwinImportContentDialog {
     this.fileName = file.name;
 
     if (file) {
-      this.is_file_valid = true
+      this.is_file_valid = true;
       fileReader.onload = ev => {
         this.fileContent = ev.target.result.toString();
       };
       fileReader.readAsText(file);
-    }
-    else {
-      this.is_file_valid = false
+    } else {
+      this.is_file_valid = false;
     }
   }
 

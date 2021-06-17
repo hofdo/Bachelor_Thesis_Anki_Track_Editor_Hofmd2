@@ -15,7 +15,6 @@
     <mat-select formControlName="fileFormat" [disabled]="form.get('format').value === 'conf'">
       <mat-option value="jpg">JPEG</mat-option>
       <mat-option value="png">PNG</mat-option>
-      <mat-option *ngIf="form.get('format').value !== 'single'" value="pdf">PDF</mat-option>
     </mat-select>
     <mat-error *ngIf="form.get('fileFormat').invalid && form.get('format').value !== 'conf'">You must make a selection</mat-error>
   </mat-form-field>

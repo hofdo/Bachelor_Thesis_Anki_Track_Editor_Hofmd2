@@ -2,17 +2,19 @@
 <div>
 <mat-form-field appearance="fill">
   <mat-label>Speed</mat-label>
-  <input matInput [(ngModel)]="pubData.speed">
+  <input matInput class="align-content-center" [(ngModel)]="pubData.speed">
 </mat-form-field>
 <p></p>
 <mat-form-field appearance="fill">
   <mat-label>Accel</mat-label>
-  <input matInput [(ngModel)]="pubData.acceleration">
+  <input matInput class="align-content-center" [(ngModel)]="pubData.acceleration">
 </mat-form-field>
 <p></p>
 <mat-form-field appearance="fill">
   <mat-label>Lane</mat-label>
-  <input matInput [(ngModel)]="pubData.lane">
+  <input matInput class="align-content-center" [(ngModel)]="pubData.lane">
 </mat-form-field>
-<button mat-button  (click)="closeBottomSheet()">Export</button>
+  <div class="w-auto align-content-center" >
+    <button mat-button  (click)="closeBottomSheet()">Send</button>
+  </div>
 </div>

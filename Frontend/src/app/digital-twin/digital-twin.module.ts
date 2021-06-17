@@ -41,6 +41,7 @@ import {
 import {RouterModule} from '@angular/router';
 import {ExportService} from '../services/export.service';
 import {SharedModule} from '../shared/shared.module';
+import {environment} from '../../environments/environment';
 
 /**
  * Set the Broker Address for the mqtt configuration
@@ -60,7 +61,9 @@ else {
 export const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
   hostname: mqtt_broker,
   port: 9001,
-  path: '/mqtt'
+  path: '/mqtt',
+  username: environment.MQTT.username,
+  password: environment.MQTT.password
 };
 
 /**

@@ -26,12 +26,23 @@ export class ExportService {
    * @param lanes: How many lanes the track piece should have
    * @param track_id: What Track ID the track piece should have
    */
-  exportEach(type, lanes, track_id){
-    return this.httpClient.get("http://"+environment.Rest.server+":"+environment.Rest.port.toString()+"/image", {
-      'responseType': 'blob',
-      'params': new HttpParams().set("type", type)
+  exportEach(type, lanes, track_id, left, right){
+    let params
+    if (type === "junction"){
+      params = new HttpParams().set("type", type)
+        .set("lanes", lanes)
+        .set("track_id", track_id).
+        set("left", left).
+        set("right", right)
+    }
+    else {
+      params = new HttpParams().set("type", type)
         .set("lanes", lanes)
         .set("track_id", track_id)
+    }
+    return this.httpClient.get("http://"+environment.Rest.server+":"+environment.Rest.port.toString()+"/image", {
+      'responseType': 'blob',
+      'params': params
     })
   }
 
